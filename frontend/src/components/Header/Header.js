@@ -21,13 +21,13 @@ function Header() {
       <nav className="header-nav">
         {isAuthenticated ? (
           <>
-            <span className="header-welcome">Welcome, {user?.username || 'User'}!</span>
-            <button onClick={handleLogout} className="header-button">Logout</button>
+            <span className="header-welcome">Dobro došli, {user?.username || 'User'}!</span>
+            <button onClick={handleLogout} className="header-button">Odjava</button>
           </>
         ) : (
           <>
-            <Link to="/login" className="header-link">Login</Link>
-            <Link to="/signup" className="header-link">Sign Up</Link>
+            <Link to="/login" className="header-link">Prijava</Link>
+            <Link to="/signup" className="header-link">Registracija</Link>
           </>
         )}
       </nav>

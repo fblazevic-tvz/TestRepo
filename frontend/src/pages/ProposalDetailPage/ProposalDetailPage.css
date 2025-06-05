@@ -8,7 +8,7 @@
   width: 100%;
   min-height: 250px;
   background: #eef4ff;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   flex-wrap: wrap;
   border-bottom: 1px solid #dee2e6;
   margin-bottom: 30px;
@@ -25,12 +25,12 @@
 
 .header-headline {
   width: 100%;
-  font-family: 'Roboto';
+  font-family: "Roboto";
   font-style: normal;
   font-weight: 700;
   font-size: 2.8rem;
   line-height: 1.15;
-  color: #21272A;
+  color: #21272a;
   margin: 0;
 }
 
@@ -51,8 +51,8 @@
 .header-image-placeholder {
   width: 100%;
   height: 250px;
-  background: #DDE1E6;
-  border: 1px dashed #C1C7CD;
+  background: #dde1e6;
+  border: 1px dashed #c1c7cd;
   border-radius: 8px;
   display: flex;
   justify-content: center;
@@ -88,34 +88,54 @@
   align-items: flex-start;
   padding: 0;
   margin-bottom: 0;
-  border-bottom: 3px solid #dee2e6;
+  border-bottom: 2px solid #dee2e6;
+  background-color: #f8f9fa;
+  border-radius: 8px 8px 0 0;
+}
+
+.detail-page-tabs {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0;
+  margin-bottom: 0;
+  border-bottom: 2px solid #dee2e6;
+  background-color: #f8f9fa;
+  border-radius: 8px 8px 0 0;
 }
 
 .tab-button {
-  padding: 15px 25px;
-  font-family: 'Roboto';
+  padding: 16px 28px;
+  font-family: "Roboto";
   font-style: normal;
-  font-weight: 600;
-  font-size: 1.1rem;
-  line-height: 1.2;
+  font-weight: 500;
+  font-size: 1rem;
+  line-height: 1.3;
   text-align: center;
   color: #495057;
   background: none;
   border: none;
-  border-bottom: 3px solid transparent;
+  border-bottom: 2px solid transparent;
   cursor: pointer;
-  margin-bottom: -3px;
-  transition: color 0.2s ease, border-bottom-color 0.2s ease;
+  margin-bottom: -2px;
+  transition: all 0.2s ease;
   white-space: nowrap;
+  position: relative;
 }
 
 .tab-button:hover {
   color: #0d6efd;
+  background-color: rgba(13, 110, 253, 0.04);
+  border-radius: 6px 6px 0 0;
 }
 
 .tab-button.active {
   color: #0d6efd;
   border-bottom-color: #0d6efd;
+  background-color: rgba(13, 110, 253, 0.06);
+  font-weight: 600;
+  border-radius: 6px 6px 0 0;
 }
 
 .tab-content {

@@ -33,7 +33,7 @@ namespace IzjasniSe.Api.Controllers
             if (user is null)
             {
                 logger.LogWarning("Registration failed for username {Username}. Already exists or other error.", request.Username);
-                return BadRequest("Username or email already exists.");
+                return BadRequest("Korisničko ime ili email već postoje.");
             }
 
             logger.LogInformation("Registration successful, user ID: {UserId}", user.Id);
@@ -58,7 +58,7 @@ namespace IzjasniSe.Api.Controllers
             if (result is null || result.Value.User is null || result.Value.Tokens is null)
             {
                 logger.LogWarning("Login failed for username {Username}. Invalid credentials or inactive account.", request.Username);
-                return BadRequest("Invalid username or password, or account inactive.");
+                return BadRequest("Neispravno korisničko ime ili lozinka, ili je račun neaktivan.");
             }
 
             var (user, tokens) = result.Value;
@@ -116,7 +116,7 @@ namespace IzjasniSe.Api.Controllers
             logger.LogInformation("Deleting refresh token cookie.");
 
             Response.Cookies.Delete("refreshToken", GetRefreshTokenCookieOptions());
-            return Ok("Logged out successfully");
+            return Ok("Uspješno ste se odjavili");
         }
 
         [Authorize]

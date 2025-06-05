@@ -27,7 +27,7 @@ function LoginPage() {
       console.log("[LoginPage] Context login function call completed.");
     } catch (err) {
       console.error("[LoginPage] Error caught in handleSubmit:", err);
-      setError(err.message || 'Login failed. Please check credentials or console.');
+      setError(err.message || 'Prijava nije uspjela. Molimo provjerite podatke za prijavu.');
       setLoading(false);
     }
   };
@@ -35,11 +35,11 @@ function LoginPage() {
   return (
     <div className="login-page-container">
       <div className="login-form-box">
-        <h2>Sign In</h2>
+        <h2>Prijavi se</h2>
         <form onSubmit={handleSubmit} noValidate>
           {error && <div className="alert alert-danger">{error}</div>}
           <div className="form-group">
-            <label htmlFor="username">Username</label>
+            <label htmlFor="username">Korisničko ime</label>
             <input
               type="text"
               id="username"
@@ -53,7 +53,7 @@ function LoginPage() {
             />
           </div>
           <div className="form-group">
-            <label htmlFor="password">Password</label>
+            <label htmlFor="password">Lozinka</label>
             <input
               type="password"
               id="password"
@@ -70,10 +70,10 @@ function LoginPage() {
             className="button-primary login-button"
             disabled={loading}
           >
-            {loading ? 'Signing In...' : 'Sign In'}
+            {loading ? 'Prijava...' : 'Prijava'}
           </button>
           <div className="signup-link">
-            Don't have an account? <Link to="/signup">Sign Up</Link>
+            Nemate račun? <Link to="/signup">Registrirajte se</Link>
           </div>
         </form>
       </div>
