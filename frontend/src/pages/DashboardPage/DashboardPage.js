@@ -83,7 +83,7 @@ function DashboardPage() {
     <div className="dashboard-layout">
       <Sidebar />
       <main className="dashboard-main-content">
-        <h1>Dashboard</h1>
+        <h1>Upravljačka ploča</h1>
         {user ? (
           <p className="welcome-message">Dobrodošli!</p>
         ) : (
@@ -111,7 +111,7 @@ function DashboardPage() {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onConfirm={handleConfirmDelete}
-        title="Potvrdi Brisanje"
+        title="Potvrdi brisanje"
         message={`Jeste li sigurni da želite trajno obrisati ovaj prijedlog? Ova akcija ne može biti poništena.`}
         confirmText="Obriši"
         cancelText="Odustani"

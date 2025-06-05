@@ -64,7 +64,7 @@ function Navbar() {
               to="/dashboard"
               className={({ isActive }) => "nav-link" + (isActive ? " active" : "")}
             >
-              Dashboard
+              Upravljačka ploča
             </NavLink>
           </>
         )}

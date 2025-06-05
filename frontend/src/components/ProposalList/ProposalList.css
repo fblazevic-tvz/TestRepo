@@ -1,16 +1,37 @@
 .proposal-list-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 24px;
-    width: 100%;
-    padding: 0;
-    box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.proposal-list-container > * {
+  flex: 0 1 480px;
+  min-width: 400px;
+  max-width: 500px;
+}
+
+.no-proposals-message {
+  width: 100%;
+  text-align: center;
+  padding: 40px;
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+@media (max-width: 768px) {
+  .proposal-list-container {
+    gap: 16px;
   }
   
-  .no-proposals-message {
-      width: 100%;
-      text-align: center;
-      padding: 40px;
-      font-size: 1.1rem;
-      color: #6c757d;
+  .proposal-list-container > * {
+    flex: 1 1 100%;
+    min-width: 320px;
+    max-width: 500px;
   }
+}

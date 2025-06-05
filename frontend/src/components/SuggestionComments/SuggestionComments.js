@@ -156,7 +156,7 @@ function SuggestionComments({ suggestionId, initialComments = [] }) {
                             suggestionId={suggestionId} 
                             onCommentUpdated={handleCommentUpdated} 
                             onCommentDeleted={handleCommentDeleted} 
-                            onReplyAdded={handleReplyAdded} 
+                            onReplyAdded={handleReplyAdded}
                         />
                     ))
                 ) : (

@@ -23,7 +23,7 @@ function SuggestionDetailInfo({ suggestion }) {
     const authorName = author?.userName || "Anonimno";
     const locationName = location?.name || location?.address || "Nepoznata lokacija";
     const locationCityName = location?.city?.name || ""; 
-    const proposalName = proposal?.name || "Nepoznat Natječaj";
+    const proposalName = proposal?.name || "Nepoznat natječaj";
     const voteCount = votes?.length || 0;
 
     return (
@@ -37,7 +37,7 @@ function SuggestionDetailInfo({ suggestion }) {
             </div>
 
             <aside className="suggestion-info-sidebar">
-                <h4>Informacije o Prijedlogu</h4>
+                <h4>Informacije o prijedlogu</h4>
                 <div className="sidebar-info-item">
                     <span className="sidebar-info-label">Status:</span>
                     <span className="sidebar-info-value status">{status}</span>

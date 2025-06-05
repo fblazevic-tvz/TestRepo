@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { formatDateCroatian } from '../../utils/formatters';
 import { useAuth } from '../../context/AuthContext';
 import { updateComment, deleteComment, createComment } from '../../services/commentService';
+import ConfirmationModal from '../ConfirmationModal/ConfirmationModal';
 import './CommentItem.css';
 
 function CommentItem({ comment, suggestionId, onCommentUpdated, onCommentDeleted, onReplyAdded }) {
@@ -14,6 +15,8 @@ function CommentItem({ comment, suggestionId, onCommentUpdated, onCommentDeleted
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isReplyLoading, setIsReplyLoading] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const {
         id: commentId,
@@ -85,12 +88,12 @@ function CommentItem({ comment, suggestionId, onCommentUpdated, onCommentDeleted
         }
     };
 
-    const handleDelete = async () => {
-        if (!window.confirm("Jeste li sigurni da želite obrisati ovaj komentar? Akcija je nepovratna.")) {
-            return;
-        }
+    const handleDeleteClick = () => {
+        setShowDeleteModal(true);
+    };
 
-        setIsLoading(true);
+    const handleConfirmDelete = async () => {
+        setIsDeleting(true);
         setError('');
         try {
             await deleteComment(commentId);
@@ -102,11 +105,16 @@ function CommentItem({ comment, suggestionId, onCommentUpdated, onCommentDeleted
                 updatedAt: new Date().toISOString()
             };
             onCommentDeleted(pseudoDeletedComment);
+            setShowDeleteModal(false);
         } catch (err) {
             console.error("Failed to delete comment:", err);
             setError(err.message || "Brisanje komentara nije uspjelo.");
-            setIsLoading(false);
+            setIsDeleting(false);
         }
+    };
+
+    const handleCancelDelete = () => {
+        setShowDeleteModal(false);
     };
 
     const handleToggleReply = () => {
@@ -155,101 +163,114 @@ function CommentItem({ comment, suggestionId, onCommentUpdated, onCommentDeleted
     };
 
     return (
-        <div className={`comment-item ${isDeleted ? 'deleted' : ''}`}>
-            <div className="comment-avatar">
-                <div className="comment-user-icon"></div>
-            </div>
-
-            <div className="comment-content-container">
-                <div className="comment-header">
-                    <span className="comment-author">{authorName}</span>
-                    <span className="comment-date">
-                        {formatDateCroatian(displayDate)}
-                        {isEditedIndicator && !isDeleted && <span className="comment-edited-indicator">(uređeno)</span>}
-                        {isDeleted && <span className="comment-edited-indicator">(obrisano)</span>}
-                    </span>
+        <>
+            <div className={`comment-item ${isDeleted ? 'deleted' : ''}`}>
+                <div className="comment-avatar">
+                    <div className="comment-user-icon"></div>
                 </div>
 
-                {isEditing ? (
-                    <div className="comment-edit-form">
-                        <textarea
-                            value={editedContent}
-                            onChange={(e) => setEditedContent(e.target.value)}
-                            rows="3"
-                            className="comment-edit-textarea"
-                            disabled={isLoading}
-                            aria-label="Uredi komentar"
-                        />
-                        {error && <p className="comment-error">{error}</p>}
-                        <div className="comment-edit-actions">
-                            <button onClick={handleSaveEdit} disabled={isLoading} className="button-primary save-button">
-                                {isLoading ? 'Spremanje...' : 'Spremi'}
-                            </button>
-                            <button onClick={handleCancelEdit} disabled={isLoading} className="button-secondary cancel-button">
-                                Odustani
-                            </button>
+                <div className="comment-content-container">
+                    <div className="comment-header">
+                        <span className="comment-author">{authorName}</span>
+                        <span className="comment-date">
+                            {formatDateCroatian(displayDate)}
+                            {isEditedIndicator && !isDeleted && <span className="comment-edited-indicator">(uređeno)</span>}
+                            {isDeleted && <span className="comment-edited-indicator">(obrisano)</span>}
+                        </span>
+                    </div>
+
+                    {isEditing ? (
+                        <div className="comment-edit-form">
+                            <textarea
+                                value={editedContent}
+                                onChange={(e) => setEditedContent(e.target.value)}
+                                rows="3"
+                                className="comment-edit-textarea"
+                                disabled={isLoading}
+                                aria-label="Uredi komentar"
+                            />
+                            {error && <p className="comment-error">{error}</p>}
+                            <div className="comment-edit-actions">
+                                <button onClick={handleSaveEdit} disabled={isLoading} className="button-primary save-button">
+                                    {isLoading ? 'Spremanje...' : 'Spremi'}
+                                </button>
+                                <button onClick={handleCancelEdit} disabled={isLoading} className="button-secondary cancel-button">
+                                    Odustani
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                ) : (
-                    <p className="comment-text">{content}</p>
-                )}
+                    ) : (
+                        <p className="comment-text">{content}</p>
+                    )}
 
-                {!isEditing && !isDeleted && (
-                    <div className="comment-actions">
-                        {canModify && (
-                            <>
-                                <button onClick={handleEdit} className="comment-action-button edit-button" disabled={isLoading}>Uredi</button>
-                                <button onClick={handleDelete} className="comment-action-button delete-button" disabled={isLoading}>Obriši</button>
-                            </>
-                        )}
-                        {isAuthenticated && (
-                            <button onClick={handleToggleReply} className="comment-action-button reply-button" disabled={isLoading || isReplyLoading}>
-                                {isReplying ? 'Odustani' : 'Odgovori'}
-                            </button>
-                        )}
-                    </div>
-                )}
-                {!isEditing && !isReplying && error && <p className="comment-error">{error}</p>}
-
-                {isReplying && (
-                    <div className="comment-reply-form">
-                        <textarea
-                            placeholder={`Odgovor na ${authorName}...`}
-                            rows="2"
-                            value={replyContent}
-                            onChange={handleReplyContentChange}
-                            disabled={isReplyLoading}
-                            className="comment-reply-textarea"
-                            aria-label={`Odgovori na komentar od ${authorName}`}
-                        />
-                        {error && <p className="comment-error">{error}</p>}
-                        <div className="comment-reply-actions">
-                            <button onClick={handleReplySubmit} className="button-primary reply-submit-button" disabled={isReplyLoading || !replyContent.trim()}>
-                                {isReplyLoading ? 'Slanje...' : 'Pošalji Odgovor'}
-                            </button>
+                    {!isEditing && !isDeleted && (
+                        <div className="comment-actions">
+                            {canModify && (
+                                <>
+                                    <button onClick={handleEdit} className="comment-action-button edit-button" disabled={isLoading}>Uredi</button>
+                                    <button onClick={handleDeleteClick} className="comment-action-button delete-button" disabled={isLoading}>Obriši</button>
+                                </>
+                            )}
+                            {isAuthenticated && (
+                                <button onClick={handleToggleReply} className="comment-action-button reply-button" disabled={isLoading || isReplyLoading}>
+                                    {isReplying ? 'Odustani' : 'Odgovori'}
+                                </button>
+                            )}
                         </div>
-                    </div>
-                )}
+                    )}
+                    {!isEditing && !isReplying && error && <p className="comment-error">{error}</p>}
 
-                {replies && replies.length > 0 && (
-                    <div className="comment-replies">
-                        {replies
-                            .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
-                            .map(reply => (
-                                <CommentItem
-                                    key={reply.id}
-                                    comment={reply}
-                                    suggestionId={suggestionId}
-                                    onCommentUpdated={onCommentUpdated}
-                                    onCommentDeleted={onCommentDeleted}
-                                    onReplyAdded={onReplyAdded}
-                                />
-                            ))
-                        }
-                    </div>
-                )}
+                    {isReplying && (
+                        <div className="comment-reply-form">
+                            <textarea
+                                placeholder={`Odgovor na ${authorName}...`}
+                                rows="2"
+                                value={replyContent}
+                                onChange={handleReplyContentChange}
+                                disabled={isReplyLoading}
+                                className="comment-reply-textarea"
+                                aria-label={`Odgovori na komentar od ${authorName}`}
+                            />
+                            {error && <p className="comment-error">{error}</p>}
+                            <div className="comment-reply-actions">
+                                <button onClick={handleReplySubmit} className="button-primary reply-submit-button" disabled={isReplyLoading || !replyContent.trim()}>
+                                    {isReplyLoading ? 'Slanje...' : 'Pošalji Odgovor'}
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {replies && replies.length > 0 && (
+                        <div className="comment-replies">
+                            {replies
+                                .sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+                                .map(reply => (
+                                    <CommentItem
+                                        key={reply.id}
+                                        comment={reply}
+                                        suggestionId={suggestionId}
+                                        onCommentUpdated={onCommentUpdated}
+                                        onCommentDeleted={onCommentDeleted}
+                                        onReplyAdded={onReplyAdded}
+                                    />
+                                ))
+                            }
+                        </div>
+                    )}
+                </div>
             </div>
-        </div>
+
+            <ConfirmationModal
+                isOpen={showDeleteModal}
+                onClose={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
+                title="Potvrdi brisanje komentara"
+                message={`Jeste li sigurni da želite obrisati ovaj komentar? Ova akcija ne može biti poništena.`}
+                confirmText="Obriši"
+                cancelText="Odustani"
+                isLoading={isDeleting}
+            />
+        </>
     );
 }
 
