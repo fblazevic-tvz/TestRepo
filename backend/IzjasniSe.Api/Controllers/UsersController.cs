@@ -4,6 +4,7 @@ using IzjasniSe.Api.Dtos;
 using Microsoft.AspNetCore.Identity;
 using IzjasniSe.Api.Services.Interfaces;
 using IzjasniSe.Model.Enums;
+using Microsoft.AspNetCore.Authorization;
 
 namespace IzjasniSe.Api.Controllers
 {
@@ -95,28 +96,18 @@ namespace IzjasniSe.Api.Controllers
             return NoContent();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<UserReadDto>> ChangeUserStatus(int id, UserAccountStatus status)
+        [HttpPatch("status/{id:int}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> ChangeUserStatus(int id, [FromBody] ChangeUserStatusDto dto)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var isUnique = await _users.CheckUniqueness(userCreateDto.UserName, userCreateDto.Email);
+            var success = await _users.ChangeStatusAsync(id, dto.Status);
+            if (!success)
+                return NotFound();
 
-            if (!isUnique)
-            {
-                ModelState.AddModelError("UserName", "Username or email already exists.");
-                return BadRequest(ModelState);
-            }
-
-            var created = await _users.CreateAsync(userCreateDto);
-
-
-            return CreatedAtRoute(
-                "GetUserById",
-                new { id = created.Id },
-                created
-            );
+            return NoContent();
         }
     }
 }

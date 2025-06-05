@@ -104,6 +104,18 @@ namespace IzjasniSe.Api.Services
             return true;
         }
 
+        public async Task<bool> ChangeStatusAsync(int id, UserAccountStatus status)
+        {  
+            var user = await GetByIdAsync(id);
+            if (user == null) return false;
+
+            user.AccountStatus = status;
+            user.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<bool> CheckUniqueness(string? username, string? email)
         {
             var exists = await _db.Users
