@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { loginUser } from '../../services/authService';
 import './LoginPage.css';
@@ -10,6 +10,9 @@ function LoginPage() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
+  const location = useLocation();
+
+  const from = location.state?.from?.pathname || '/dashboard';
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,7 +26,7 @@ function LoginPage() {
       console.log("[LoginPage] loginUser service returned:", loginData);
 
       console.log("[LoginPage] loginData structure seems valid. Calling context login function...");
-      login(loginData);
+      login(loginData, from);
       console.log("[LoginPage] Context login function call completed.");
     } catch (err) {
       console.error("[LoginPage] Error caught in handleSubmit:", err);

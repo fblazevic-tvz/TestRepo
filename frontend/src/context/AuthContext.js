@@ -1,9 +1,19 @@
-import React, { createContext, useState, useContext, useEffect, useMemo, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
-import { api } from '../services/api';
-import { checkAuthStatus as checkAuthApi, logoutUser as logoutApi } from '../services/authService';
-import { fetchMyVotedSuggestionIds } from '../services/voteService';
+import React, {
+  createContext,
+  useState,
+  useContext,
+  useEffect,
+  useMemo,
+  useCallback,
+} from "react";
+import PropTypes from "prop-types";
+import { useNavigate } from "react-router-dom";
+import { api } from "../services/api";
+import {
+  checkAuthStatus as checkAuthApi,
+  logoutUser as logoutApi,
+} from "../services/authService";
+import { fetchMyVotedSuggestionIds } from "../services/voteService";
 
 const AuthContext = createContext(undefined);
 
@@ -15,11 +25,12 @@ export const AuthProvider = ({ children }) => {
 
   const [votedSuggestionIds, setVotedSuggestionIds] = useState(new Set());
 
-
   const loadUserVotes = useCallback(async () => {
     const currentToken = accessToken;
     if (!currentToken) {
-      console.log("[AuthContext] No access token in state, skipping user votes load.");
+      console.log(
+        "[AuthContext] No access token in state, skipping user votes load."
+      );
       if (votedSuggestionIds.size > 0) {
         setVotedSuggestionIds(new Set());
         console.log("[AuthContext] Cleared votes due to missing token.");
@@ -36,14 +47,13 @@ export const AuthProvider = ({ children }) => {
     }
   }, [accessToken]);
 
-
   useEffect(() => {
     if (accessToken) {
-      api.defaults.headers.common['Authorization'] = `Bearer ${accessToken}`;
+      api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       console.log("[AuthContext] Axios header set.");
       loadUserVotes();
     } else {
-      delete api.defaults.headers.common['Authorization'];
+      delete api.defaults.headers.common["Authorization"];
       console.log("[AuthContext] Axios header cleared.");
       setVotedSuggestionIds(new Set());
       console.log("[AuthContext] Cleared votes due to token removal.");
@@ -55,15 +65,19 @@ export const AuthProvider = ({ children }) => {
     const verifyUser = async () => {
       console.log("[AuthContext] verifyUser started (initial load/refresh).");
       try {
-        const { accessToken: newAccessToken, user: loggedInUser } = await checkAuthApi();
+        const { accessToken: newAccessToken, user: loggedInUser } =
+          await checkAuthApi();
         if (isMounted) {
-          console.log("[AuthContext] verifyUser success. Setting user and token state:", loggedInUser);
+          console.log(
+            "[AuthContext] verifyUser success. Setting user and token state:",
+            loggedInUser
+          );
           setUser(loggedInUser);
           setAccessToken(newAccessToken);
         }
       } catch (error) {
         if (isMounted) {
-          console.log('[AuthContext] verifyUser failed. Clearing state.');
+          console.log("[AuthContext] verifyUser failed. Clearing state.");
           setUser(null);
           setAccessToken(null);
         }
@@ -75,58 +89,92 @@ export const AuthProvider = ({ children }) => {
       }
     };
     verifyUser();
-    return () => { isMounted = false; };
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  const login = useCallback(async (loginData) => {
-    console.log("[AuthContext] login function started...");
-    const userData = {
-      userId: loginData.userId,
-      username: loginData.username,
-      role: loginData.role
-    };
+  const login = useCallback(
+    async (loginData, redirectTo = "/dashboard") => {
+      console.log("[AuthContext] login function started...");
+      const userData = {
+        userId: loginData.userId,
+        username: loginData.username,
+        role: loginData.role,
+      };
 
-    setUser(userData);
-    console.log("[AuthContext] User state set:", userData);
-    console.log("[AuthContext] Setting access token to trigger vote loading...");
-    setAccessToken(loginData.accessToken);
-    console.log("[AuthContext] Navigating to /dashboard (votes loading might be async)...");
-    try { navigate('/dashboard'); }
-    catch (navError) { console.error("[AuthContext] Error during navigation:", navError); }
-
-  }, [navigate]);
+      setUser(userData);
+      console.log("[AuthContext] User state set:", userData);
+      console.log(
+        "[AuthContext] Setting access token to trigger vote loading..."
+      );
+      setAccessToken(loginData.accessToken);
+      console.log(
+        "[AuthContext] Navigating to",
+        redirectTo,
+        "(votes loading might be async)..."
+      );
+      try {
+        navigate(redirectTo);
+      } catch (navError) {
+        console.error("[AuthContext] Error during navigation:", navError);
+      }
+    },
+    [navigate]
+  );
 
   const logout = useCallback(async () => {
-    try { await logoutApi(); }
-    catch (error) { console.error("Backend logout failed:", error); }
-    finally {
+    try {
+      await logoutApi();
+    } catch (error) {
+      console.error("Backend logout failed:", error);
+    } finally {
       setAccessToken(null);
       setUser(null);
       setVotedSuggestionIds(new Set());
-      window.location.href = '/';
+      window.location.href = "/";
     }
   }, []);
 
   const updateUserVoteStatus = useCallback((suggestionId, hasVoted) => {
-    setVotedSuggestionIds(prevSet => {
+    setVotedSuggestionIds((prevSet) => {
       const newSet = new Set(prevSet);
-      if (hasVoted) { newSet.add(suggestionId); }
-      else { newSet.delete(suggestionId); }
-      console.log("[AuthContext] Updated vote status via callback:", suggestionId, hasVoted, newSet);
+      if (hasVoted) {
+        newSet.add(suggestionId);
+      } else {
+        newSet.delete(suggestionId);
+      }
+      console.log(
+        "[AuthContext] Updated vote status via callback:",
+        suggestionId,
+        hasVoted,
+        newSet
+      );
       return newSet;
     });
   }, []);
 
-  const value = useMemo(() => ({
-    accessToken,
-    user,
-    isAuthenticated: !!accessToken && !!user,
-    isLoading,
-    votedSuggestionIds,
-    updateUserVoteStatus,
-    login,
-    logout,
-  }), [accessToken, user, isLoading, votedSuggestionIds, updateUserVoteStatus, login, logout]);
+  const value = useMemo(
+    () => ({
+      accessToken,
+      user,
+      isAuthenticated: !!accessToken && !!user,
+      isLoading,
+      votedSuggestionIds,
+      updateUserVoteStatus,
+      login,
+      logout,
+    }),
+    [
+      accessToken,
+      user,
+      isLoading,
+      votedSuggestionIds,
+      updateUserVoteStatus,
+      login,
+      logout,
+    ]
+  );
 
   useEffect(() => {
     const handleTokenRefreshed = (event) => {
@@ -135,16 +183,12 @@ export const AuthProvider = ({ children }) => {
       setUser(userData);
       setAccessToken(newAccessToken);
     };
-    window.addEventListener('token-refreshed', handleTokenRefreshed);
-    return () => window.removeEventListener('token-refreshed', handleTokenRefreshed);
+    window.addEventListener("token-refreshed", handleTokenRefreshed);
+    return () =>
+      window.removeEventListener("token-refreshed", handleTokenRefreshed);
   }, []);
 
-
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  );
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 AuthProvider.propTypes = {
@@ -154,7 +198,7 @@ AuthProvider.propTypes = {
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 };
