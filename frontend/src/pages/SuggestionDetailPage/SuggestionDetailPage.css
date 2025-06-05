@@ -1,0 +1,110 @@
+.back-link-container {
+    padding: 0 0 20px 0;
+    margin-top: -10px;
+}
+
+.back-link-button {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    color: #0d6efd;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.back-link-button:hover {
+    text-decoration: underline;
+    color: #0a58ca;
+}
+
+.suggestion-detail-header {
+    padding: 25px 0 20px 0;
+    margin-bottom: 30px;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.suggestion-detail-header h1 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    color: #343a40;
+    margin: 0 0 10px 0;
+    line-height: 1.2;
+}
+
+.suggestion-header-meta {
+    font-family: 'Roboto', sans-serif;
+    font-size: 0.95rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+.detail-page-content-area.suggestion-content-area {
+    padding: 0px 0 40px;
+}
+
+.detail-page-tabs.suggestion-tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0;
+    margin-bottom: 0;
+    border-bottom: 3px solid #dee2e6;
+    width: 100%;
+}
+
+.tab-button {
+    padding: 14px 22px;
+    font-family: 'Roboto', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 1rem;
+    line-height: 1.2;
+    text-align: center;
+    color: #495057;
+    background: none;
+    border: none;
+    border-bottom: 3px solid transparent;
+    cursor: pointer;
+    margin-bottom: -3px;
+    transition: color 0.2s ease, border-bottom-color 0.2s ease;
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    color: #0d6efd;
+    background-color: #f8f9fa;
+}
+
+.tab-button.active {
+    color: #0d6efd;
+    border-bottom-color: #0d6efd;
+    font-weight: 700;
+}
+
+.tab-content {
+    padding: 35px 5px 5px 5px;
+}
+
+.alert.detail-error {
+    text-align: center;
+    margin: 40px 10px;
+    padding: 15px;
+}
+
+.alert.detail-error a {
+    display: inline-block;
+    margin-top: 15px;
+    font-weight: 500;
+    color: #842029;
+    text-decoration: underline;
+}
+
+.alert.detail-error a:hover {
+    color: #5a161b;
+}

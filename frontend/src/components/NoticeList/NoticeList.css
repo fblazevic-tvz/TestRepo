@@ -1,0 +1,16 @@
+.notice-list-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    width: 100%;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .no-notices-message {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 40px;
+      font-size: 1.1rem;
+      color: #6c757d;
+  }

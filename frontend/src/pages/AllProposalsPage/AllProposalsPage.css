@@ -1,0 +1,123 @@
+.all-proposals-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.all-proposals-content {
+  flex-grow: 1;
+  padding: 40px;
+  width: 100%;
+  max-width: 1700px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.all-proposals-title {
+  text-align: center;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #343a40;
+  margin-bottom: 40px;
+}
+
+.alert.alert-danger {
+  width: 100%;
+  max-width: 800px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.no-proposals-message {
+  width: 100%;
+  text-align: center;
+  padding: 40px;
+  font-size: 1.1rem;
+  color: #6c757d;
+}
+
+.pagination-nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 30px 0;
+  gap: 8px;
+  margin-top: 40px;
+}
+
+.pagination-button {
+  box-sizing: border-box;
+  padding: 8px 14px;
+  min-width: 40px;
+  border: 1px solid #dee2e6;
+  background-color: #ffffff;
+  color: #0d6efd;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  margin: 2px;
+}
+
+.pagination-button:hover:not(:disabled) {
+  background-color: #e9ecef;
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+  color: #6c757d;
+}
+
+.pagination-button.active {
+  background-color: #0d6efd;
+  color: #ffffff;
+  border-color: #0d6efd;
+  font-weight: bold;
+  cursor: default;
+}
+
+.pagination-button.prev-next {
+  font-weight: 500;
+}
+
+.filter-controls-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 8px;
+  margin-bottom: 30px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1 1 200px;
+  min-width: 180px;
+}
+
+.filter-label {
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.filter-input,
+.filter-select {
+  height: 40px;
+}
+
+.filter-select {
+  appearance: none;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns=\'http://www.w3.org/2000/svg\'%20width=\'292.4\'%20height=\'292.4\'%3E%3Cpath%20fill=\'%23007bff\'%20d=\'M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z\'/%3E%3C/svg%3E');
+  background-repeat: no-repeat;
+  background-position: right 0.7rem center;
+  background-size: 8px 10px;
+  padding-right: 2rem;
+}
