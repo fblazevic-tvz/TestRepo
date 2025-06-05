@@ -1,0 +1,54 @@
+.app-header {
+    background-color: #ffffff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #dee2e6;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    box-sizing: border-box;
+  }
+  
+  .header-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #343a40;
+    text-decoration: none;
+  }
+  
+  .header-nav {
+    display: flex;
+    align-items: center;
+  }
+  
+  .header-link, .header-button, .header-welcome {
+    margin-left: 15px;
+    text-decoration: none;
+    color: #495057;
+  }
+  
+  .header-link:hover {
+    color: #0d6efd;
+    text-decoration: none;
+  }
+  
+  .header-button {
+      background: none;
+      border: none;
+      padding: 0;
+      font: inherit;
+      color: #dc3545;
+      cursor: pointer;
+  }
+  .header-button:hover {
+      text-decoration: underline;
+  }
+  
+  .header-welcome {
+    color: #6c757d;
+  }

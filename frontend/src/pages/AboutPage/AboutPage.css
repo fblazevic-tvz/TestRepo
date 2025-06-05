@@ -1,0 +1,363 @@
+.about-page-container {
+  width: 100%;
+}
+
+.about-hero-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 50px 80px;
+  gap: 60px;
+  width: 100%;
+  min-height: 450px;
+  background: #F2F4F8;
+  font-family: 'Roboto', sans-serif;
+  flex-wrap: wrap-reverse;
+}
+
+.about-hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px 0px;
+  gap: 24px;
+  flex: 1;
+  min-width: 300px;
+}
+
+.about-hero-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 16px;
+  width: 100%;
+  max-width: 650px;
+}
+
+.about-hero-headline {
+  width: 100%;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 48px;
+  line-height: 1.15;
+  color: #21272A;
+  margin: 0 0 10px 0;
+}
+
+.about-hero-paragraph {
+  width: 100%;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #495057;
+  margin: 0;
+}
+
+.about-hero-image-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  min-width: 300px;
+  max-height: 400px;
+  overflow: hidden;
+}
+
+.about-hero-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: 600px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.about-team-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 40px;
+  gap: 48px;
+  width: 100%;
+  background: #FFFFFF;
+}
+
+.team-members-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 40px;
+  width: 100%;
+  max-width: 800px;
+}
+
+.team-member-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 16px;
+  width: 100%;
+  max-width: 250px;
+  text-align: center;
+}
+
+.team-member-image-wrapper {
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: #F2F4F8;
+  margin-bottom: 10px;
+  flex-shrink: 0;
+  border: 3px solid #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.team-member-image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.team-member-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.team-member-name {
+  font-family: 'Roboto';
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #21272A;
+}
+
+.team-member-role {
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.4;
+  color: #697077;
+}
+
+.about-faq-section {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 60px 40px;
+  gap: 40px;
+  width: 100%;
+  background: #F2F4F8;
+}
+
+.about-faq-section .section-text-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 16px;
+  width: 100%;
+  max-width: 1000px;
+  text-align: center;
+}
+
+.about-faq-section .section-text-top {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0px;
+  gap: 8px;
+  width: 100%;
+}
+
+.about-faq-section .section-secondary-headline {
+  height: auto;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 1.1;
+  text-align: center;
+  color: #21272A;
+  margin: 0;
+}
+
+.faq-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 900px;
+}
+
+.faq-item {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: 16px 20px;
+  width: 100%;
+  min-height: 56px;
+  background: #FFFFFF;
+  border: 1px solid #DDE1E6;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.faq-item:hover {
+  background-color: #f8f9fa;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.faq-toggle {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+}
+
+.faq-question {
+  flex-grow: 1;
+  font-family: 'Roboto';
+  font-weight: 500;
+  font-size: 17px;
+  line-height: 1.4;
+  color: #21272A;
+  padding-right: 10px;
+}
+
+.faq-icon-placeholder {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  font-size: 24px;
+  line-height: 1;
+  text-align: center;
+  color: #0F62FE;
+  font-weight: bold;
+  transition: transform 0.3s ease;
+}
+
+.faq-answer {
+  padding: 12px 0 4px 0;
+  font-size: 15px;
+  line-height: 1.6;
+  color: #495057;
+  width: 100%;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease-out, padding 0.4s ease-out;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+  padding-top: 16px;
+  padding-bottom: 8px;
+}
+
+.faq-item.open .faq-icon-placeholder {
+  transform: rotate(5deg);
+}
+
+@media (max-width: 768px) {
+  .about-hero-section {
+    padding: 40px 20px;
+    flex-direction: column;
+  }
+
+  .about-hero-image-area {
+    order: -1;
+    height: 250px;
+    max-width: 400px;
+  }
+
+  .about-hero-content {
+    align-items: center;
+    text-align: center;
+  }
+
+  .about-hero-text {
+    align-items: center;
+  }
+
+  .about-hero-headline {
+    font-size: 36px;
+  }
+
+  .about-hero-paragraph {
+    font-size: 16px;
+  }
+
+  .about-team-section {
+    padding: 40px 20px;
+    gap: 30px;
+  }
+
+  .about-team-section .section-secondary-headline {
+    font-size: 30px;
+  }
+
+  .about-team-section .section-paragraph {
+    font-size: 16px;
+  }
+
+  .team-members-container {
+    gap: 30px;
+  }
+
+  .team-member-card {
+    max-width: 200px;
+  }
+
+  .team-member-image-wrapper {
+    width: 140px;
+    height: 140px;
+  }
+
+  .team-member-name {
+    font-size: 16px;
+  }
+
+  .team-member-role {
+    font-size: 14px;
+  }
+
+  .about-faq-section {
+    padding: 40px 20px;
+    gap: 30px;
+  }
+
+  .about-faq-section .section-secondary-headline {
+    font-size: 30px;
+  }
+
+  .faq-list {
+    max-width: 100%;
+  }
+
+  .faq-question {
+    font-size: 16px;
+  }
+
+  .faq-answer {
+    font-size: 14px;
+  }
+}
