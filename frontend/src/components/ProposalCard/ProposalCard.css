@@ -208,12 +208,37 @@
   display: flex;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   padding: 16px;
   gap: 16px;
   width: 100%;
   box-sizing: border-box;
   border-top: 1px solid #DDE1E6;
   flex-shrink: 0;
+}
+
+.proposal-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+
+.proposal-action-icon-button {
+  padding: 4px !important;
+  color: #6c757d;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.proposal-action-icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.proposal-action-icon-button.edit:hover {
+  color: #0d6efd;
+}
+
+.proposal-action-icon-button.delete:hover {
+  color: #dc3545;
 }
 
 .proposal-card-button-primary,

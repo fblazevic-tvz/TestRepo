@@ -190,7 +190,7 @@ function CreateSuggestionPage() {
             className="button-primary form-submit-button"
             disabled={isSubmitting || submitStatus.success}
           >
-            {isSubmitting ? 'Slanje...' : 'Pošalji Prijedlog'}
+            {isSubmitting ? 'Slanje...' : 'Pošalji prijedlog'}
           </button>
           <button
             type="button"

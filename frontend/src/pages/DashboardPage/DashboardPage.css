@@ -46,6 +46,22 @@
     margin-bottom: 20px;
 }
 
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+}
+
+.section-header h2 {
+    margin-bottom: 0;
+}
+
+.create-button {
+    padding: 10px 20px;
+    font-size: 1rem;
+}
+
 .alert.alert-danger {
     margin-top: 15px;
 }

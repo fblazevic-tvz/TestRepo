@@ -11,6 +11,8 @@ import DashboardPage from './pages/DashboardPage/DashboardPage';
 import AboutPage from './pages/AboutPage/AboutPage';
 import AllProposalsPage from './pages/AllProposalsPage/AllProposalsPage';
 import ProposalDetailPage from './pages/ProposalDetailPage/ProposalDetailPage';
+import CreateProposalPage from './pages/CreateProposalPage/CreateProposalPage';
+import EditProposalPage from './pages/EditProposalPage/EditProposalPage';
 import AllNoticesPage from './pages/AllNoticesPage/AllNoticesPage';
 import NoticeDetailPage from './pages/NoticeDetailPage/NoticeDetailPage'
 import AllSuggestionsPage from './pages/AllSuggestionsPage/AllSuggestionsPage';
@@ -45,11 +47,16 @@ function App() {
           <Route path="suggestions/edit/:suggestionId" element={<EditSuggestionPage />} />
         </Route>
 
+        <Route element={<ProtectedRoute allowedRoles={['Moderator']}><Outlet /></ProtectedRoute>}>
+          <Route path="create-proposal" element={<CreateProposalPage />} />
+          <Route path="proposals/edit/:proposalId" element={<EditProposalPage />} />
+        </Route>
+
         <Route element={<ProtectedRoute allowedRoles={['Admin']}><Outlet /></ProtectedRoute>}>
           <Route path="dashboard/users" element={<AllUsersPage />} />
           <Route path="dashboard/users/:userId" element={<UserDetailPage />} />
         </Route>
-        
+
         <Route path="*" element={<NotFoundPage />} />
 
       </Route>

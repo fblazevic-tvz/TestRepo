@@ -39,7 +39,7 @@ namespace IzjasniSe.Api.Controllers
             return Ok(prop);
         }
 
-        [HttpGet("moderator/{id:int}", Name = "GetProposalByModeratorId")]
+        [HttpGet("moderator/{moderatorId:int}", Name = "GetProposalByModeratorId")]
         [Authorize(Roles ="Moderator")]
         public async Task<ActionResult<IEnumerable<Proposal>>> GetByModeratorId(int moderatorId)
         {

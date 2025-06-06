@@ -37,7 +37,8 @@ namespace IzjasniSe.Api.Services
                     UserName = user.UserName,
                     Email = user.Email,
                     Role = user.Role,
-                    accountStatus = user.AccountStatus
+                    accountStatus = user.AccountStatus,
+                    CreatedAt = user.CreatedAt
                 };
 
                 userReadDtoList.Add(userReadDto);
@@ -45,7 +46,7 @@ namespace IzjasniSe.Api.Services
 
             return userReadDtoList;
         }
-        private async Task<User?> GetUserEntityById(int id)
+        private async Task<User?> GetUserEntityByIdAsync(int id)
         {
             var currentUserId = _loggednInService.GetCurrentUserId();
             var isCurrentUserAdmin = _loggednInService.IsCurrentUserAdmin();
@@ -85,6 +86,7 @@ namespace IzjasniSe.Api.Services
                     Email = user.Email,
                     Role = user.Role,
                     accountStatus = user.AccountStatus,
+                    CreatedAt = user.CreatedAt
                 };
             }
 
@@ -121,7 +123,7 @@ namespace IzjasniSe.Api.Services
 
         public async Task<bool> UpdateAsync(int id, UserUpdateDto userUpdateDto)
         {
-            var existingUser = await GetUserEntityById(id);
+            var existingUser = await GetUserEntityByIdAsync(id);
             if (existingUser == null) return false;
 
             if (!string.IsNullOrEmpty(userUpdateDto.Email))
@@ -163,7 +165,7 @@ namespace IzjasniSe.Api.Services
 
         public async Task<bool> ChangeStatusAsync(int id, UserAccountStatus status)
         {  
-            var user = await GetUserEntityById(id);
+            var user = await GetUserEntityByIdAsync(id);
             if (user == null) return false;
 
             user.AccountStatus = status;

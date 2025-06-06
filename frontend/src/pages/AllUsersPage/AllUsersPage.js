@@ -152,7 +152,7 @@ function AllUsersPage() {
               <option value="">-- Sve uloge --</option>
               <option value="Admin">Admin</option>
               <option value="Moderator">Moderator</option>
-              <option value="Regular">User</option>
+              <option value="Regular">Korisnik</option>
             </select>
           </div>
         </div>
