@@ -66,6 +66,7 @@ function NoticeCard({ notice, onEdit, onDelete }) {
                     alt="Vizualni prikaz za obavijest"
                     className="notice-card-image"
                     loading="lazy"
+                    onClick={goToDetails}
                 />
             </div>
             <div className="notice-card-content">

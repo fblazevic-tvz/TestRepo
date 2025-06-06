@@ -59,7 +59,7 @@
   padding: 12px 12px 10px;
   gap: 8px;
   text-decoration: none;
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-style: normal;
   font-weight: 500;
   font-size: 17px;
@@ -108,7 +108,7 @@
   padding: 10px 20px;
   height: 44px;
   border-radius: 12px;
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-style: normal;
   font-weight: 500;
   font-size: 16px;

@@ -85,7 +85,7 @@
 
 .section-caption {
   height: auto;
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -99,7 +99,7 @@
 
 .section-secondary-headline {
   height: auto;
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-style: normal;
   font-weight: 700;
   font-size: 36px;
@@ -112,7 +112,7 @@
 .section-paragraph {
   width: 100%;
   max-width: 800px;
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-style: normal;
   font-weight: 400;
   font-size: 18px;
@@ -180,7 +180,7 @@
 .novi-natjecaji-section .section-caption,
 .novosti-section .section-caption {
   height: auto;
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-style: normal;
   font-weight: 700;
   font-size: 18px;
@@ -195,7 +195,7 @@
 .novi-natjecaji-section .section-secondary-headline,
 .novosti-section .section-secondary-headline {
   height: auto;
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-style: normal;
   font-weight: 700;
   font-size: 36px;

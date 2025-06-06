@@ -59,6 +59,7 @@ function ProposalCard({ proposal, showActions = false, onEdit, onDelete }) {
                     alt="Vizualni prikaz za natječaj"
                     className="proposal-card-image"
                     loading="lazy"
+                    onClick={goToDetails}
                 />
             </div>
 

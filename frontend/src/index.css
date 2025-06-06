@@ -2,7 +2,7 @@
 
 body {
     margin: 0;
-    font-family: 'Roboto', sans-serif; 
+    font-family: var(--app-font-family);;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #f8f9fa;

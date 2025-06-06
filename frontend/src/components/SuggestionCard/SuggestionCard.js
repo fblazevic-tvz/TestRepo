@@ -100,6 +100,7 @@ function SuggestionCard({ suggestion, showActions = false, onEdit, onDelete, onV
         alt="Vizualni prikaz za prijedlog"
         className="suggestion-card-image"
         loading="lazy"
+        onClick={goToDetails}
       />
 
       <div className="suggestion-card-content">

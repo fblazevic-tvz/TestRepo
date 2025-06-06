@@ -102,7 +102,7 @@
 }
 
 .user-card-name {
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-size: 1.25rem;
   font-weight: 600;
   color: #21272A;
@@ -111,7 +111,7 @@
 }
 
 .user-card-email {
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-size: 0.95rem;
   color: #495057;
   margin: 0;
@@ -171,7 +171,7 @@
   padding: 10px 20px;
   height: 40px;
   border-radius: 8px;
-  font-family: 'Roboto';
+  font-family: var(--app-font-family);
   font-style: normal;
   font-weight: 500;
   font-size: 0.875rem;

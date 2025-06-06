@@ -36,16 +36,19 @@ function AccessibilityController() {
 
   const applyDyslexicFont = (isEnabled) => {
     if (isEnabled) {
-      // OpenDyslexic is a common dyslexia-friendly font
-      // You can also use Comic Sans, Arial, or other sans-serif fonts
-      document.body.style.fontFamily = 'OpenDyslexic, Comic Sans MS, Arial, sans-serif';
+
+      document.documentElement.style.setProperty('--app-font-family', 'OpenDyslexic, Comic Sans MS, Arial, sans-serif');
+      document.documentElement.classList.add('dyslexic-font');
+
       // Add more spacing for better readability
       document.body.style.letterSpacing = '0.12em';
       document.body.style.wordSpacing = '0.16em';
       document.body.style.lineHeight = '1.8';
     } else {
       // Reset to original font
-      document.body.style.fontFamily = "'Roboto', sans-serif";
+      document.documentElement.style.setProperty('--app-font-family', "'Roboto', sans-serif");
+      document.documentElement.classList.remove('dyslexic-font');
+
       document.body.style.letterSpacing = 'normal';
       document.body.style.wordSpacing = 'normal';
       document.body.style.lineHeight = 'normal';
@@ -126,7 +129,7 @@ function AccessibilityController() {
           
           {/* Font Size Section */}
           <div className="control-section">
-            <h4 className="section-title">Veličina teksta</h4>
+            <h4 className="section-title">Veličina pisma</h4>
             <div className="font-size-display">
               <span className="size-value">{fontSize}%</span>
             </div>
@@ -135,7 +138,7 @@ function AccessibilityController() {
               <input
                 type="range"
                 min="70"
-                max="150"
+                max="200"
                 value={fontSize}
                 onChange={handleFontSizeChange}
                 className="font-size-slider"
@@ -147,9 +150,8 @@ function AccessibilityController() {
 
           {/* Dyslexic Font Toggle */}
           <div className="control-section">
-            <h4 className="section-title">Font za disleksiju</h4>
+            <h4 className="section-title">Prilagodba disleksiji</h4>
             <p className="section-description">
-              Koristi font prilagođen osobama s disleksijom
             </p>
             <label className="toggle-switch">
               <input
@@ -164,9 +166,8 @@ function AccessibilityController() {
 
           {/* High Contrast Toggle */}
           <div className="control-section">
-            <h4 className="section-title">Visoki kontrast</h4>
+            <h4 className="section-title">Prilagodba slabovidnosti</h4>
             <p className="section-description">
-              Povećava kontrast za bolju vidljivost
             </p>
             <label className="toggle-switch">
               <input

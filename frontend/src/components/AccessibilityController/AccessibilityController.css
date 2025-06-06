@@ -23,6 +23,7 @@
   justify-content: center;
   transition: all 0.3s ease;
   position: relative;
+  font-size: 16px !important; /* Ensure button isn't affected */
 }
 
 .accessibility-toggle-button:hover {
@@ -65,7 +66,7 @@
 }
 
 .panel-title {
-  font-size: 1.2rem;
+  font-size: 19.2px !important; /* Was 1.2rem, now fixed */
   font-weight: 600;
   color: #343a40;
   margin: 0 0 20px 0;
@@ -85,18 +86,19 @@
 }
 
 .section-title {
-  font-size: 1rem;
+  font-size: 16px !important; /* Was 1rem, now fixed */
   font-weight: 600;
   color: #495057;
   margin: 0 0 8px 0;
 }
 
 .section-description {
-  font-size: 0.875rem;
+  font-size: 14px !important; /* Was 0.875rem, now fixed */
   color: #6c757d;
   margin: 0 0 12px 0;
   line-height: 1.4;
 }
+
 
 .font-size-display {
   text-align: center;
@@ -104,7 +106,7 @@
 }
 
 .size-value {
-  font-size: 1.5rem;
+  font-size: 24px !important; /* Was 1.5rem, now fixed */
   font-weight: 700;
   color: #0F62FE;
 }
@@ -117,16 +119,17 @@
 }
 
 .slider-label-min {
-  font-size: 0.875rem;
+  font-size: 14px !important; /* Was 0.875rem, now fixed */
   color: #6c757d;
   font-weight: 500;
 }
 
 .slider-label-max {
-  font-size: 1.25rem;
+  font-size: 20px !important; /* Was 1.25rem, now fixed */
   color: #6c757d;
   font-weight: 500;
 }
+
 
 .font-size-slider {
   flex: 1;
@@ -216,7 +219,7 @@
   width: 100%;
   padding: 12px;
   margin-top: 20px;
-  font-size: 0.95rem;
+  font-size: 15.2px !important; /* Was 0.95rem, now fixed */
   font-weight: 500;
   background-color: transparent;
   border: 2px solid #6c757d;
@@ -301,6 +304,39 @@
   border-top-color: var(--border-color) !important;
 }
 
+/* Global font override when dyslexic font is enabled */
+.dyslexic-font,
+.dyslexic-font * {
+  font-family: OpenDyslexic, Comic Sans MS, Arial, sans-serif !important;
+}
+
+/* Ensure all text elements inherit the font */
+.dyslexic-font body,
+.dyslexic-font input,
+.dyslexic-font textarea,
+.dyslexic-font select,
+.dyslexic-font button,
+.dyslexic-font .form-control,
+.dyslexic-font .button-primary,
+.dyslexic-font .button-secondary,
+.dyslexic-font .button-danger,
+.dyslexic-font h1,
+.dyslexic-font h2,
+.dyslexic-font h3,
+.dyslexic-font h4,
+.dyslexic-font h5,
+.dyslexic-font h6,
+.dyslexic-font p,
+.dyslexic-font span,
+.dyslexic-font div,
+.dyslexic-font a,
+.dyslexic-font li,
+.dyslexic-font td,
+.dyslexic-font th,
+.dyslexic-font label {
+  font-family: OpenDyslexic, Comic Sans MS, Arial, sans-serif !important;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .accessibility-controller {
@@ -319,8 +355,22 @@
   }
   
   .accessibility-panel {
-    width: 280px;
-    padding: 20px;
-    right: -8px;
-  }
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  width: 320px;
+  animation: slideUp 0.3s ease-out;
+  border: 1px solid #e9ecef;
+  
+  /* Reset font size to be independent of root font size */
+  font-size: 16px !important;
+}
+.accessibility-panel * {
+  /* Reset any inherited font-size changes */
+  font-size: inherit !important;
+}
 }
