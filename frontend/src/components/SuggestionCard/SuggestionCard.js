@@ -115,7 +115,7 @@ function SuggestionCard({ suggestion, showActions = false, onEdit, onDelete, onV
         <p className="suggestion-card-paragraph">{shortDescription}</p>
 
         <div className="suggestion-card-user-card">
-          <div className="suggestion-user-thumb"><div className="user-icon-placeholder-card"></div></div>
+          <div className="suggestion-user-thumb"><div className="user-icon-suggestion-placeholder-card"></div></div>
           <div className="suggestion-user-details">
             <span className="suggestion-user-name">{authorName}</span>
             <span className="suggestion-user-role">Podneseno: {formatDateCroatian(createdAt)}</span>

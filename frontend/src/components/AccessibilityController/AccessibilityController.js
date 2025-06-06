@@ -37,7 +37,7 @@ function AccessibilityController() {
   const applyDyslexicFont = (isEnabled) => {
     if (isEnabled) {
 
-      document.documentElement.style.setProperty('--app-font-family', 'OpenDyslexic, Comic Sans MS, Arial, sans-serif');
+      document.documentElement.style.setProperty('--app-font-family', 'OpenDyslexic, Roboto, Arial, sans-serif');
       document.documentElement.classList.add('dyslexic-font');
 
       // Add more spacing for better readability

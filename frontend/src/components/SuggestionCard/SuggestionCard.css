@@ -136,7 +136,7 @@
     flex-shrink: 0;
 }
 
-.user-icon-placeholder-card {
+.user-icon-suggestion-placeholder-card {
     width: 18px;
     height: 18px;
     border: 1px solid #C1C7CD;
@@ -144,7 +144,7 @@
     position: relative;
 }
 
-.user-icon-placeholder-card::after {
+.user-icon-suggestion-placeholder-card::after {
     content: '';
     position: absolute;
     top: 2.5px;
@@ -156,7 +156,7 @@
     border-radius: 50%;
 }
 
-.user-icon-placeholder-card::before {
+.user-icon-suggestion-placeholder-card::before {
     content: '';
     position: absolute;
     bottom: -1px;

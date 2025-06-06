@@ -75,7 +75,7 @@ function ProposalCard({ proposal, showActions = false, onEdit, onDelete }) {
 
                 <div className="proposal-card-user-card">
                     <div className="proposal-user-thumb">
-                        <div className="user-icon-placeholder-card"></div>
+                        <div className="user-icon-proposal-placeholder-card"></div>
                     </div>
                     <div className="proposal-user-details">
                         <span className="proposal-user-name">{moderatorName}</span>

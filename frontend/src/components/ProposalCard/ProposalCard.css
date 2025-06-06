@@ -132,7 +132,7 @@
   flex-shrink: 0;
 }
 
-.user-icon-placeholder-card {
+.user-icon-proposal-placeholder-card {
   width: 20px;
   height: 20px;
   border: 1.5px solid #C1C7CD;
@@ -140,7 +140,7 @@
   position: relative;
 }
 
-.user-icon-placeholder-card::after {
+.user-icon-proposal-placeholder-card::after {
   content: '';
   position: absolute;
   top: 3px;
@@ -152,7 +152,7 @@
   border-radius: 50%;
 }
 
-.user-icon-placeholder-card::before {
+.user-icon-proposal-placeholder-card::before {
   content: '';
   position: absolute;
   bottom: -1px;

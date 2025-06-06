@@ -2,7 +2,8 @@
 
 body {
     margin: 0;
-    font-family: var(--app-font-family);;
+    font-family: var(--app-font-family);
+    ;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     background-color: #f8f9fa;
@@ -10,26 +11,27 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-  }
+}
 
 :root {
-  --primary-color: #0d6efd;
-  --primary-hover: #0b5ed7;
-  --success-color: #198754;
-  --danger-color: #dc3545;
-  --border-radius: 8px;
-  --spacing-sm: 8px;
-  --spacing-md: 16px;
-  --spacing-lg: 24px;
+    --app-font-family: 'Roboto';
+    --primary-color: #0d6efd;
+    --primary-hover: #0b5ed7;
+    --success-color: #198754;
+    --danger-color: #dc3545;
+    --border-radius: 8px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
 }
 
 a {
-  text-decoration: none;
-  color: #0d6efd; 
+    text-decoration: none;
+    color: #0d6efd;
 }
 
 a:hover {
-  text-decoration: underline;
+    text-decoration: underline;
 }
 
 button {
@@ -49,11 +51,11 @@ button:disabled {
 }
 
 .button-primary {
-  background-color: #0F62FE;
-  border-color: #0F62FE;
-  color: #FFFFFF;
-  padding: 10px 20px;
-  border-radius: 8px;
+    background-color: #0F62FE;
+    border-color: #0F62FE;
+    color: #FFFFFF;
+    padding: 10px 20px;
+    border-radius: 8px;
 }
 
 .button-primary:hover:not(:disabled) {
@@ -106,7 +108,7 @@ button:disabled {
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
     transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    box-sizing: border-box; 
+    box-sizing: border-box;
 }
 
 .form-control:focus {
