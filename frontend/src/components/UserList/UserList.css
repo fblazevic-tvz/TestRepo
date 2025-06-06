@@ -1,0 +1,26 @@
+.user-list-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.user-list-container > * {
+  flex: 0 1 360px;
+  min-width: 300px;
+  max-width: 400px;
+}
+
+.no-users-message {
+  width: 100%;
+  text-align: center;
+  padding: 40px;
+  font-size: 1.1rem;
+  color: #6c757d;
+  font-style: italic;
+}

@@ -63,7 +63,7 @@
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.2;
   color: #697077;
   margin: 0;
@@ -71,7 +71,7 @@
 
 .proposal-card-category.status,
 .proposal-card-category.budget {
-  font-size: 13px;
+  font-size: 0.875rem;
   color: #4D5358;
 }
 
@@ -80,7 +80,7 @@
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 700;
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1.2;
   color: #21272A;
   margin: 0;
@@ -96,7 +96,7 @@
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 0.875rem;
   line-height: 1.4;
   color: #21272A;
   margin: 0;
@@ -176,7 +176,7 @@
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.2;
   color: #21272A;
   margin: 0;
@@ -190,14 +190,14 @@
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 400;
-  font-size: 13px;
+  font-size: 0.875rem;
   line-height: 1.4;
   color: #697077;
   margin: 0;
 }
 
 .proposal-card-dates {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: #697077;
   padding-top: 5px;
   width: 100%;
@@ -228,7 +228,7 @@
   font-family: 'Roboto';
   font-style: normal;
   font-weight: 500;
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1;
   letter-spacing: 0.5px;
   cursor: pointer;

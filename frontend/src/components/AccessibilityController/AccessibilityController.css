@@ -1,0 +1,326 @@
+/* Import OpenDyslexic font */
+@import url('https://fonts.cdnfonts.com/css/opendyslexic');
+
+.accessibility-controller {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+  font-family: 'Roboto', sans-serif;
+}
+
+.accessibility-toggle-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #0F62FE;
+  color: #FFFFFF;
+  border: none;
+  box-shadow: 0 4px 12px rgba(15, 98, 254, 0.3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.accessibility-toggle-button:hover {
+  background-color: #0043ce;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(15, 98, 254, 0.4);
+}
+
+.accessibility-controller.open .accessibility-toggle-button {
+  background-color: #0043ce;
+}
+
+.accessibility-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.accessibility-panel {
+  position: absolute;
+  bottom: 70px;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  width: 320px;
+  animation: slideUp 0.3s ease-out;
+  border: 1px solid #e9ecef;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.panel-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #343a40;
+  margin: 0 0 20px 0;
+  text-align: center;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.control-section {
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.control-section:last-of-type {
+  border-bottom: none;
+}
+
+.section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #495057;
+  margin: 0 0 8px 0;
+}
+
+.section-description {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+}
+
+.font-size-display {
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.size-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #0F62FE;
+}
+
+.slider-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+
+.slider-label-min {
+  font-size: 0.875rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.slider-label-max {
+  font-size: 1.25rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.font-size-slider {
+  flex: 1;
+  height: 6px;
+  background: #e9ecef;
+  border-radius: 3px;
+  outline: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+}
+
+.font-size-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: #0F62FE;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.font-size-slider::-webkit-slider-thumb:hover {
+  background: #0043ce;
+  transform: scale(1.1);
+}
+
+.font-size-slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: #0F62FE;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Toggle Switch Styles */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 26px;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.3s;
+  border-radius: 26px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: 0.3s;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: #0F62FE;
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(24px);
+}
+
+.reset-button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 20px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  background-color: transparent;
+  border: 2px solid #6c757d;
+  border-radius: 8px;
+  color: #6c757d;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.reset-button:hover {
+  background-color: #6c757d;
+  color: #ffffff;
+}
+
+/* High Contrast Mode Styles */
+.high-contrast {
+  /* Background colors */
+  --bg-primary: #000000 !important;
+  --bg-secondary: #1a1a1a !important;
+  --bg-light: #2d2d2d !important;
+  
+  /* Text colors */
+  --text-primary: #ffffff !important;
+  --text-secondary: #f0f0f0 !important;
+  --text-muted: #cccccc !important;
+  
+  /* Border colors */
+  --border-color: #ffffff !important;
+  
+  /* Primary colors */
+  --primary: #ffff00 !important;
+  --primary-hover: #ffff33 !important;
+}
+
+/* Apply high contrast to your app */
+.high-contrast body {
+  background-color: var(--bg-primary) !important;
+  color: var(--text-primary) !important;
+}
+
+.high-contrast a {
+  color: var(--primary) !important;
+  text-decoration: underline !important;
+}
+
+.high-contrast button {
+  border: 2px solid var(--border-color) !important;
+}
+
+.high-contrast .button-primary {
+  background-color: var(--primary) !important;
+  color: var(--bg-primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.high-contrast .button-secondary {
+  background-color: var(--bg-primary) !important;
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+}
+
+.high-contrast .form-control {
+  background-color: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: 2px solid var(--border-color) !important;
+}
+
+.high-contrast .navbar-container {
+  background-color: var(--bg-secondary) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+.high-contrast .proposal-card,
+.high-contrast .notice-card,
+.high-contrast .suggestion-card {
+  background-color: var(--bg-secondary) !important;
+  border: 2px solid var(--border-color) !important;
+}
+
+.high-contrast .app-footer {
+  background-color: var(--bg-secondary) !important;
+  border-top-color: var(--border-color) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .accessibility-controller {
+    bottom: 80px;
+    right: 16px;
+  }
+  
+  .accessibility-toggle-button {
+    width: 48px;
+    height: 48px;
+  }
+  
+  .accessibility-icon {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .accessibility-panel {
+    width: 280px;
+    padding: 20px;
+    right: -8px;
+  }
+}

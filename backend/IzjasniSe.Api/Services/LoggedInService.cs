@@ -35,7 +35,7 @@ namespace IzjasniSe.Api.Services
             return userId;
         }
 
-         public bool IsCurrentUserAdminOrModerator()
+        public bool IsCurrentUserAdminOrModerator()
         {
             var user = GetCurrentUser();
             if (user?.Identity?.IsAuthenticated != true)
@@ -53,6 +53,15 @@ namespace IzjasniSe.Api.Services
                 return false;
             }
             return user.IsInRole("Moderator");
+        }
+        public bool IsCurrentUserAdmin()
+        {
+            var user = GetCurrentUser();
+            if (user?.Identity?.IsAuthenticated != true)
+            {
+                return false;
+            }
+            return user.IsInRole("Admin");
         }
 
     }

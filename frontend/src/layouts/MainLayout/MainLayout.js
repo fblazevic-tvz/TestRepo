@@ -4,6 +4,8 @@ import Navbar from '../../components/Navbar/Navbar';
 import Partners from '../../components/Partners/Partners';
 import Footer from '../../components/Footer/Footer';
 import './MainLayout.css';
+import AccessibilityController from '../../components/AccessibilityController/AccessibilityController';
+
 
 function MainLayout({ children }) {
   return (
@@ -12,6 +14,7 @@ function MainLayout({ children }) {
       <main className="page-content">
         {children}
       </main>
+      <AccessibilityController/>
       <Partners />
       <Footer />
     </div>

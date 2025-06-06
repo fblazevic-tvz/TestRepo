@@ -119,11 +119,11 @@ function AllSuggestionsPage() {
 
     return (
       <nav className="pagination-nav">
-        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="pagination-button prev-next">« Previous</button>
+        <button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1} className="pagination-button prev-next">« Prethodni</button>
         {pageNumbers.map(number => (
           <button key={number} onClick={() => handlePageChange(number)} disabled={currentPage === number} className={`pagination-button page-number ${currentPage === number ? 'active' : ''}`}>{number}</button>
         ))}
-        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="pagination-button prev-next">Next »</button>
+        <button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages} className="pagination-button prev-next">Sljedeći »</button>
       </nav>
     );
   };

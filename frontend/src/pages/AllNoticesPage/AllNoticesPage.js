@@ -85,7 +85,7 @@ function AllNoticesPage() {
           disabled={currentPage === 1}
           className="pagination-button prev-next"
         >
-          « Previous
+          « Prethodni
         </button>
         {pageNumbers.map(number => (
           <button
@@ -102,7 +102,7 @@ function AllNoticesPage() {
           disabled={currentPage === totalPages}
           className="pagination-button prev-next"
         >
-          Next »
+          Sljedeći »
         </button>
       </nav>
     );

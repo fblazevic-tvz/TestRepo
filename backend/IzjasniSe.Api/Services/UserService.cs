@@ -11,11 +11,13 @@ namespace IzjasniSe.Api.Services
     public class UserService : IUserService
     {
         private readonly AppDbContext _db;
+        private readonly ILoggedInService _loggednInService;
         private readonly PasswordHasher<User> _passwordHasher = new();
 
-        public UserService(AppDbContext db)
+        public UserService(AppDbContext db, ILoggedInService loggedInService)
         {
             _db = db;
+            _loggednInService = loggedInService;
         }
 
         public async Task<IEnumerable<User>> GetAllAsync()
@@ -28,9 +30,17 @@ namespace IzjasniSe.Api.Services
 
         public async Task<User?> GetByIdAsync(int id)
         {
-            return await _db.Users
+            var currentUserId = _loggednInService.GetCurrentUserId();
+            var isCurrentUserAdmin = _loggednInService.IsCurrentUserAdmin();
+            if (isCurrentUserAdmin || currentUserId == id)
+            {
+                return await _db.Users
                             .Include(u => u.City)
                             .FirstOrDefaultAsync(u => u.Id == id);
+            }
+            else {
+                return null;
+            }
         }
 
         public async Task<UserReadDto> CreateAsync(UserCreateDto userCreateDto)

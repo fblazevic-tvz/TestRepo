@@ -21,7 +21,13 @@ function DashboardPage() {
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    if (user?.userId) {
+    if (user?.role === 'Admin') {
+      navigate('/dashboard/users', { replace: true });
+    }
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (user?.userId && user?.role !== 'Admin') {
       setIsLoading(true);
       setError('');
       fetchMySuggestions()
@@ -79,6 +85,11 @@ function DashboardPage() {
     }
   }, [suggestionToDeleteId]);
 
+  // Don't render suggestions for admin
+  if (user?.role === 'Admin') {
+    return null;
+  }
+
   return (
     <div className="dashboard-layout">
       <Sidebar />
@@ -102,7 +113,7 @@ function DashboardPage() {
                 onDelete={handleDeleteSuggestion}
               />
             ) : (
-              <></>
+              <p className="no-items-message">Nemate još prijedloga.</p>
             )
           )}
         </section>

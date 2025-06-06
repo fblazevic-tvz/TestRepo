@@ -8,6 +8,7 @@ namespace IzjasniSe.Api.Services.Interfaces
         int? GetCurrentUserId();
         bool IsCurrentUserAdminOrModerator();
         bool IsCurrentUserModerator();
+        bool IsCurrentUserAdmin();
 
     }
 }

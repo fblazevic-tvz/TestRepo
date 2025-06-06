@@ -18,6 +18,9 @@ import SuggestionDetailPage from './pages/SuggestionDetailPage/SuggestionDetailP
 import CreateSuggestionPage from './pages/CreateSuggestionPage/CreateSuggestionPage';
 import EditSuggestionPage from './pages/EditSuggestionPage/EditSuggestionPage';
 import NotFoundPage from './pages/NotFoundPage/NotFoundPage';
+import SettingsPage from './pages/SettingsPage/SettingsPage';
+import AllUsersPage from './pages/AllUsersPage/AllUsersPage';
+import UserDetailPage from './pages/UserDetailPage/UserDetailPage';
 
 import './index.css';
 
@@ -37,10 +40,16 @@ function App() {
 
         <Route element={<ProtectedRoute><Outlet /></ProtectedRoute>}>
           <Route path="dashboard" element={<DashboardPage />} />
+          <Route path="dashboard/settings" element={<SettingsPage />} />
           <Route path="create-suggestion" element={<CreateSuggestionPage />} />
           <Route path="suggestions/edit/:suggestionId" element={<EditSuggestionPage />} />
         </Route>
 
+        <Route element={<ProtectedRoute allowedRoles={['Admin']}><Outlet /></ProtectedRoute>}>
+          <Route path="dashboard/users" element={<AllUsersPage />} />
+          <Route path="dashboard/users/:userId" element={<UserDetailPage />} />
+        </Route>
+        
         <Route path="*" element={<NotFoundPage />} />
 
       </Route>
