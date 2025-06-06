@@ -2,6 +2,7 @@
 using IzjasniSe.Api.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace IzjasniSe.Api.Controllers
@@ -126,7 +127,7 @@ namespace IzjasniSe.Api.Controllers
         public IActionResult GetCurrentUser()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var username = User.FindFirstValue(ClaimTypes.Name);
+            var username = User.FindFirstValue(JwtRegisteredClaimNames.Name);
             var role = User.FindFirstValue(ClaimTypes.Role);
 
             if (string.IsNullOrEmpty(userId))

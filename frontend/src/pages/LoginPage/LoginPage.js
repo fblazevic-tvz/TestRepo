@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { loginUser } from '../../services/authService';
 import './LoginPage.css';
@@ -11,8 +11,10 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const location = useLocation();
+  const navigate = useNavigate();
 
   const from = location.state?.from?.pathname || '/dashboard';
+  console.log("Location object is : ", location)
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -77,6 +79,21 @@ function LoginPage() {
           </button>
           <div className="signup-link">
             Nemate račun? <Link to="/signup">Registrirajte se</Link>
+          </div>
+          <div className="navigation-options">
+            <Link to="/" className="home-link">← Natrag na početnu</Link>
+            {location.state?.from && location.state.from !== '/login' && (
+              <>
+                <span className="separator">ili</span>
+                <button
+                  type="button"
+                  onClick={() => navigate(location.state.from)}
+                  className="text-button"
+                >
+                  Vrati se gdje si bio
+                </button>
+              </>
+            )}
           </div>
         </form>
       </div>

@@ -66,3 +66,39 @@
   text-align: left;
   margin-bottom: 15px;
 }
+
+.navigation-options {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+}
+
+.home-link {
+  color: #6c757d;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.home-link:hover {
+  color: #0d6efd;
+  text-decoration: underline;
+}
+
+.separator {
+  margin: 0 10px;
+  color: #6c757d;
+}
+
+.text-button {
+  background: none;
+  border: none;
+  color: #0d6efd;
+  cursor: pointer;
+  font-size: inherit;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.text-button:hover {
+  color: #0b5ed7;
+}

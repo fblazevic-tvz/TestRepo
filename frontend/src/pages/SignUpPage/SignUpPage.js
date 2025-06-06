@@ -1,20 +1,21 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { registerUser } from '../../services/authService';
-import './SignUpPage.css'; 
+import './SignUpPage.css';
 
 function SignUpPage() {
   const [username, setUsername] = useState('');
-  const [email, setEmail] = useState(''); 
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   const isValidEmail = (email) => {
-      return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   }
 
   const handleSubmit = async (event) => {
@@ -22,14 +23,14 @@ function SignUpPage() {
     setError(null);
     setSuccess(null);
 
-    if (!username.trim() || !email.trim() || !password) { 
+    if (!username.trim() || !email.trim() || !password) {
       setError('Korisničko ime, email i lozinka su obavezni.');
       return;
     }
-     if (!isValidEmail(email)) {
-         setError('Molimo unesite važeću email adresu.');
-         return;
-     }
+    if (!isValidEmail(email)) {
+      setError('Molimo unesite važeću email adresu.');
+      return;
+    }
     if (password !== confirmPassword) {
       setError('Lozinke se ne podudaraju.');
       return;
@@ -38,11 +39,11 @@ function SignUpPage() {
     setLoading(true);
 
     try {
-      await registerUser({ username: username, email:email, password:password });
+      await registerUser({ username: username, email: email, password: password });
       setSuccess('Registracija uspješna! Sada se možete prijaviti.');
 
       setUsername('');
-      setEmail(''); 
+      setEmail('');
       setPassword('');
       setConfirmPassword('');
 
@@ -83,7 +84,7 @@ function SignUpPage() {
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <input
-              type="email" 
+              type="email"
               id="email"
               className="form-control"
               required
@@ -129,6 +130,10 @@ function SignUpPage() {
           </button>
           <div className="login-link">
             Već imate račun? <Link to="/login">Prijavite se</Link>
+          </div>
+          <div className="navigation-options">
+            <Link to="/" className="home-link">← Natrag na početnu</Link>
+            {location.state?.from && location.state.from !== '/login'}
           </div>
         </form>
       </div>
