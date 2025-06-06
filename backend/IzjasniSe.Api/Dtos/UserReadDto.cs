@@ -6,6 +6,5 @@ public class UserReadDto
     public string UserName { get; set; } = null!;
     public string Email { get; set; } = null!;
     public UserRole Role { get; set; }
-    public UserAccountStatus AccountStatus { get; set; }
-    public int? CityId { get; set; }
+    public UserAccountStatus accountStatus { get; set; }
 }

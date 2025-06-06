@@ -25,7 +25,7 @@ namespace IzjasniSe.Api.Controllers
 
         [HttpGet]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult<IEnumerable<User>>> GetAll()
+        public async Task<ActionResult<IEnumerable<UserReadDto>>> GetAll()
         {
             var list = await _users.GetAllAsync();
             return Ok(list);
@@ -33,7 +33,7 @@ namespace IzjasniSe.Api.Controllers
 
         [HttpGet("{id:int}", Name = "GetUserById")]
         [Authorize]
-        public async Task<ActionResult<User>> GetById(int id)
+        public async Task<ActionResult<UserReadDto>> GetById(int id)
         {
             var user = await _users.GetByIdAsync(id);
             if (user == null)

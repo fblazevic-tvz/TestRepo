@@ -194,6 +194,24 @@
   border-radius: 6px;
 }
 
+.status-tag {
+  display: inline-block;
+  padding: 6px 16px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  border-radius: 20px;
+}
+
+.status-tag.active {
+  background-color: #d1e7dd;
+  color: #0f5132;
+}
+
+.status-tag.banned {
+  background-color: #f8d7da;
+  color: #842029;
+}
+
 @media (max-width: 768px) {
   .user-info-card {
     flex-direction: column;
@@ -235,3 +253,4 @@
     padding: 20px;
   }
 }
+

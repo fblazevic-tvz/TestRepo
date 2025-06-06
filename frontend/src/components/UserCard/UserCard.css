@@ -159,6 +159,8 @@
   padding: 16px;
   border-top: 1px solid #DDE1E6;
   background-color: #f8f9fa;
+  gap: 12px;
+  align-items: center;
 }
 
 .user-card-button-primary {
@@ -188,3 +190,41 @@
   background: #0043ce;
   border-color: #0043ce;
 }
+
+.user-status-toggle-button {
+  background-color: #ffffff;
+  border: 2px solid #ffc107;
+  color: #ffc107;
+  transition: all 0.2s ease;
+}
+
+.user-status-toggle-button:hover:not(:disabled) {
+  background-color: #ffc107;
+  color: #ffffff;
+  border-color: #ffc107;
+}
+
+.user-status-toggle-button.banned {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.user-status-toggle-button.banned:hover:not(:disabled) {
+  background-color: #dc3545;
+  color: #ffffff;
+  border-color: #dc3545;
+}
+
+.user-status-toggle-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.status-error-message {
+  color: #dc3545;
+  font-size: 0.875rem;
+  margin-top: 8px;
+  padding: 0 8px;
+}
+
+

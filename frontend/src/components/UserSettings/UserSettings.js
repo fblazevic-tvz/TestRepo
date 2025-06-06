@@ -16,7 +16,7 @@ function UserSettings({ user }) {
 
   return (
     <div className="user-settings-container">
-      
+
       <div className="user-info-card">
         <div className="user-avatar-section">
           <div className="user-avatar-large">
@@ -43,6 +43,15 @@ function UserSettings({ user }) {
             <div className="info-value role-badge">
               <span className={`role-tag ${user.role?.toLowerCase() || 'user'}`}>
                 {user.role || 'Korisnik'}
+              </span>
+            </div>
+          </div>
+
+          <div className="info-group">
+            <label className="info-label">Status računa</label>
+            <div className="info-value">
+              <span className={`status-tag ${user.accountStatus === "Active" ? 'active' : 'banned'}`}>
+                {user.accountStatus === "Active" ? 'Aktivan' : 'Zabranjen'}
               </span>
             </div>
           </div>

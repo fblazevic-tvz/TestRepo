@@ -6,8 +6,8 @@ namespace IzjasniSe.Api.Services.Interfaces
 {
     public interface IUserService
     {
-        Task<IEnumerable<User>> GetAllAsync();
-        Task<User?> GetByIdAsync(int id);
+        Task<IEnumerable<UserReadDto>> GetAllAsync();
+        Task<UserReadDto?> GetByIdAsync(int id);
         Task<UserReadDto> CreateAsync(UserCreateDto userCreateDto);
         Task<bool> UpdateAsync(int id, UserUpdateDto userUpdateDto);
         Task<bool> DeleteAsync(int id);

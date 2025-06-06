@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { fetchUsers } from '../../services/userService';
 import UserList from '../../components/UserList/UserList';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
@@ -22,7 +22,7 @@ function AllUsersPage() {
       setAllUsers([]);
       try {
         const data = await fetchUsers();
-        const sortedData = data.sort((a, b) => 
+        const sortedData = data.sort((a, b) =>
           new Date(b.createdAt) - new Date(a.createdAt)
         );
         setAllUsers(sortedData);
@@ -110,12 +110,22 @@ function AllUsersPage() {
     );
   };
 
+  const handleUserStatusChanged = useCallback((userId, newStatus) => {
+    setAllUsers(prevUsers =>
+      prevUsers.map(user =>
+        user.id === userId
+          ? { ...user, accountStatus: newStatus }
+          : user
+      )
+    );
+  }, []);
+
   return (
     <div className="dashboard-layout">
       <Sidebar />
       <main className="dashboard-main-content">
         <h1>Upravljanje korisnicima</h1>
-        
+
         <div className="filter-controls-container">
           <div className="filter-group">
             <label htmlFor="search-term" className="filter-label">Pretraži korisnike:</label>
@@ -142,7 +152,7 @@ function AllUsersPage() {
               <option value="">-- Sve uloge --</option>
               <option value="Admin">Admin</option>
               <option value="Moderator">Moderator</option>
-              <option value="User">User</option>
+              <option value="Regular">User</option>
             </select>
           </div>
         </div>
@@ -157,7 +167,7 @@ function AllUsersPage() {
                 <div className="users-count">
                   Prikazano {startIndex + 1}-{Math.min(endIndex, filteredUsers.length)} od {filteredUsers.length} korisnika
                 </div>
-                <UserList users={currentUsers} />
+                <UserList users={currentUsers} onUserStatusChanged={handleUserStatusChanged} />
                 {renderPagination()}
               </>
             ) : (

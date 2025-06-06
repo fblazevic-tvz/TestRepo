@@ -1,25 +1,54 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import './UserCard.css';
 import { useNavigate } from 'react-router-dom';
 import { formatDateCroatian } from '../../utils/formatters';
+import { changeUserStatus } from '../../services/userService';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
+import GavelIcon from '@mui/icons-material/Gavel';
 
-function UserCard({ user }) {
+function UserCard({ user, onUserStatusChanged }) {
     const navigate = useNavigate();
+    const [isChangingStatus, setIsChangingStatus] = useState(false);
+    const [statusError, setStatusError] = useState('');
     const {
         id,
         userName = "Nije dostupno",
         email = "Nije dostupno",
         role = "User",
         createdAt = null,
-        isActive = true,
+        accountStatus = "Active", 
     } = user || {};
+
+    const isActive = accountStatus === "Active";
+    const isBanned = accountStatus === "Banned";
 
     const goToDetails = () => {
         if (id) {
             navigate(`/dashboard/users/${id}`);
         } else {
             console.error("User ID is missing, cannot navigate to details.");
+        }
+    };
+
+    const handleStatusToggle = async (e) => {
+        e.stopPropagation();
+        setIsChangingStatus(true);
+        setStatusError('');
+
+        try {
+            const newStatus = isActive ? "Banned" : "Active";
+            await changeUserStatus(id, newStatus);
+            
+            if (onUserStatusChanged) {
+                onUserStatusChanged(id, newStatus);
+            }
+        } catch (err) {
+            console.error("Failed to change user status:", err);
+            setStatusError(err.message || "Promjena statusa nije uspjela.");
+        } finally {
+            setIsChangingStatus(false);
         }
     };
 
@@ -30,7 +59,7 @@ function UserCard({ user }) {
                     <div className="user-icon-placeholder-card"></div>
                 </div>
                 <div className={`user-status-badge ${isActive ? 'active' : 'inactive'}`}>
-                    {isActive ? 'Aktivan' : 'Neaktivan'}
+                    {isActive ? 'Aktivan' : 'Zabranjen'}
                 </div>
             </div>
 
@@ -48,12 +77,28 @@ function UserCard({ user }) {
                 <div className="user-card-dates">
                     <span>Datum registracije: {formatDateCroatian(createdAt)}</span>
                 </div>
+                
+                {statusError && (
+                    <div className="status-error-message">{statusError}</div>
+                )}
             </div>
 
             <div className="user-card-buttons-group">
                 <button onClick={goToDetails} className="user-card-button-primary">
                     Detalji
                 </button>
+                <Tooltip title={isActive ? "Banuj korisnika" : "Ukloni ban"}>
+                    <span>
+                        <IconButton
+                            onClick={handleStatusToggle}
+                            disabled={isChangingStatus}
+                            className={`user-status-toggle-button ${isBanned ? 'banned' : ''}`}
+                            size="medium"
+                        >
+                            <GavelIcon />
+                        </IconButton>
+                    </span>
+                </Tooltip>
             </div>
         </div>
     );
@@ -66,8 +111,9 @@ UserCard.propTypes = {
         email: PropTypes.string,
         role: PropTypes.string,
         createdAt: PropTypes.string,
-        isActive: PropTypes.bool,
+        accountStatus: PropTypes.number,
     }).isRequired,
+    onUserStatusChanged: PropTypes.func,
 };
 
 export default UserCard;
