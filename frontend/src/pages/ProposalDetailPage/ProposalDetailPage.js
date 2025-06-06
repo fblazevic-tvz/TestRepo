@@ -10,8 +10,6 @@ import { formatDateCroatian } from '../../utils/formatters';
 
 import './ProposalDetailPage.css';
 
-
-
 function ProposalDetailPage() {
     const { proposalId } = useParams();
 
@@ -19,6 +17,7 @@ function ProposalDetailPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('details');
+    const [refreshNoticesKey, setRefreshNoticesKey] = useState(0);
 
     useEffect(() => {
         if (!proposalId) {
@@ -44,6 +43,10 @@ function ProposalDetailPage() {
         loadProposal();
     }, [proposalId]);
 
+    const handleNoticeCreated = (newNotice) => {
+        setRefreshNoticesKey(prev => prev + 1);
+        setActiveTab('notices');
+    };
 
     const renderHeader = () => {
         if (!proposal && !isLoading) return null;
@@ -114,15 +117,15 @@ function ProposalDetailPage() {
 
         switch (activeTab) {
             case 'details':
-                return <ProposalDetailInfo proposal={proposal} />;
+                return <ProposalDetailInfo proposal={proposal} onNoticeCreated={handleNoticeCreated} />;
             case 'participate':
                 return <ProposalParticipate proposalId={proposal.id} />;
             case 'suggestions':
                 return <ProposalSuggestions proposalId={proposal.id} />;
             case 'notices':
-                return <ProposalNotices proposalId={proposal.id} />;
+                return <ProposalNotices key={refreshNoticesKey} proposalId={proposal.id} />;
             default:
-                return <ProposalDetailInfo proposal={proposal} />;
+                return <ProposalDetailInfo proposal={proposal} onNoticeCreated={handleNoticeCreated} />;
         }
     };
 

@@ -66,3 +66,71 @@ export const fetchNoticesByProposalId = async (proposalId) => {
     throw new Error(errorMessage);
   }
 };
+
+export const createNotice = async (noticeData) => {
+  if (!noticeData || !noticeData.title || !noticeData.content || 
+      !noticeData.proposalId || !noticeData.moderatorId) {
+      return Promise.reject(new Error("Sva polja su obavezna za kreiranje obavijesti."));
+  }
+  try {
+    const response = await api.post('/notices', noticeData);
+    return response.data;
+  } catch (error) {
+    console.error('Failed to create notice:', error);
+    let errorMessage = 'Dogodila se neočekivana greška prilikom kreiranja obavijesti.';
+    if (isAxiosError(error) && error.response?.data) {
+        errorMessage = error.response.data.message
+                    || error.response.data.title
+                    || (typeof error.response.data === 'string' ? error.response.data : JSON.stringify(error.response.data));
+        if (error.response.data.errors) {
+            const validationErrors = Object.values(error.response.data.errors).flat().join(' ');
+            errorMessage += ` Detalji: ${validationErrors}`;
+        }
+    } else if (error.message) {
+        errorMessage = error.message;
+    }
+    throw new Error(errorMessage);
+  }
+};
+
+export const updateNotice = async (noticeId, noticeData) => {
+  if (!noticeId) {
+      return Promise.reject(new Error("Notice ID is required for update."));
+  }
+  if (!noticeData || Object.keys(noticeData).length === 0) {
+       return Promise.reject(new Error("No update data provided."));
+  }
+
+  try {
+    await api.put(`/notices/${noticeId}`, noticeData);
+  } catch (error) {
+    console.error(`Failed to update notice ${noticeId}:`, error);
+    let errorMessage = `Dogodila se greška prilikom ažuriranja obavijesti ${noticeId}.`;
+    if (isAxiosError(error)) {
+        if (error.response?.status === 403) { errorMessage = "Niste ovlašteni ažurirati ovu obavijest."; }
+        else if (error.response?.status === 404) { errorMessage = "Obavijest nije pronađena."; }
+        else if (error.response?.data) { errorMessage = error.response.data.message || error.response.data.title || JSON.stringify(error.response.data); }
+        else if (error.message) { errorMessage = error.message; }
+    }
+    throw new Error(errorMessage);
+  }
+};
+
+export const deleteNotice = async (noticeId) => {
+   if (!noticeId || isNaN(parseInt(noticeId, 10))) {
+      return Promise.reject(new Error("Valid Notice ID is required for deletion."));
+  }
+  try {
+    await api.delete(`/notices/${noticeId}`);
+  } catch (error) {
+    console.error(`Failed to delete notice ${noticeId}:`, error);
+    let errorMessage = `Dogodila se greška prilikom brisanja obavijesti ${noticeId}.`;
+    if (isAxiosError(error)) {
+        if (error.response?.status === 403) { errorMessage = "Niste ovlašteni obrisati ovu obavijest."; }
+        else if (error.response?.status === 404) { errorMessage = "Obavijest nije pronađena."; }
+        else if (error.response?.data) { errorMessage = error.response.data.message || error.response.data.title || JSON.stringify(error.response.data); }
+        else if (error.message) { errorMessage = error.message; }
+    }
+    throw new Error(errorMessage);
+  }
+};

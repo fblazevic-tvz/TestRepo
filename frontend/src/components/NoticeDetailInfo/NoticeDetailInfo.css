@@ -12,12 +12,24 @@
   min-width: 300px;
 }
 
-.notice-content-main h3 {
+.notice-content-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.notice-content-header h3 {
   font-size: 1.6rem;
   font-weight: 600;
   color: #343a40;
-  margin-top: 0;
-  margin-bottom: 15px;
+  margin: 0;
+}
+
+.edit-notice-button {
+  padding: 8px 18px;
+  font-size: 0.9rem;
+  white-space: nowrap;
 }
 
 .notice-content-text {
@@ -98,6 +110,17 @@
   .notice-detail-layout {
       flex-direction: column;
   }
+  
+  .notice-content-header {
+      flex-direction: column;
+      gap: 10px;
+      align-items: flex-start;
+  }
+  
+  .edit-notice-button {
+      width: 100%;
+  }
+  
   .proposal-info-sidebar {
       order: -1;
       margin-bottom: 30px;

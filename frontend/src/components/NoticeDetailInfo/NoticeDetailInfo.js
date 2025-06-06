@@ -1,18 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext';
 import { formatDateCroatian, formatCurrencyEuroCroatian } from '../../utils/formatters'; 
 import './NoticeDetailInfo.css';
 
-function NoticeDetailInfo({ notice }) {
+function NoticeDetailInfo({ notice, onEdit }) {
+    const { user, isAuthenticated } = useAuth();
+    
     if (!notice) {
         return <p>Podaci o obavijesti nisu dostupni.</p>;
     }
 
     const {
+        id,
         content = "Nema sadržaja.",
         createdAt = null,
         moderator: noticeModerator = null, 
+        moderatorId = null,
         proposal = null, 
     } = notice;
 
@@ -31,10 +36,31 @@ function NoticeDetailInfo({ notice }) {
     const cityName = city?.name || "N/A";
     const cityPostcode = city?.postcode || "N/A";
 
+    const isNoticeModerator = isAuthenticated && 
+                              user?.role === 'Moderator' && 
+                              moderatorId && 
+                              parseInt(user.userId) === moderatorId;
+
+    const handleEditClick = () => {
+        if (onEdit) {
+            onEdit(notice);
+        }
+    };
+
     return (
         <div className="notice-detail-layout">
             <div className="notice-content-main">
-                <h3>Sadržaj obavijesti</h3>
+                <div className="notice-content-header">
+                    <h3>Sadržaj obavijesti</h3>
+                    {isNoticeModerator && (
+                        <button 
+                            onClick={handleEditClick}
+                            className="button-secondary edit-notice-button"
+                        >
+                            Uredi obavijest
+                        </button>
+                    )}
+                </div>
                 <p className="notice-content-text">{content}</p>
                  <p className="notice-meta">Objavljeno: {formatDateCroatian(createdAt)} | Autor: {noticeModeratorName}</p>
             </div>
@@ -77,7 +103,8 @@ function NoticeDetailInfo({ notice }) {
 }
 
 NoticeDetailInfo.propTypes = {
-    notice: PropTypes.object, 
+    notice: PropTypes.object,
+    onEdit: PropTypes.func,
 };
 
 export default NoticeDetailInfo;

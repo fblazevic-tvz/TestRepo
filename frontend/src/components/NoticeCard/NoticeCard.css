@@ -115,7 +115,7 @@
 .notice-card-buttons-group {
   display: flex;
   flex-direction: row;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   padding: 16px;
   gap: 16px;
@@ -151,4 +151,28 @@
 
 .notice-card-button-secondary:hover {
   background-color: #eef4ff;
+}
+
+.notice-card-actions {
+  display: flex;
+  align-items: center;
+  gap: 0px;
+}
+
+.notice-action-icon-button {
+  padding: 4px !important;
+  color: #6c757d;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.notice-action-icon-button:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.notice-action-icon-button.edit:hover {
+  color: #0d6efd;
+}
+
+.notice-action-icon-button.delete:hover {
+  color: #dc3545;
 }

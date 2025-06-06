@@ -3,6 +3,28 @@
   font-family: 'Roboto', sans-serif;
 }
 
+.proposal-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.proposal-header-section h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #343a40;
+  margin: 0;
+}
+
+.create-notice-button {
+  padding: 10px 20px;
+  font-size: 0.95rem;
+  white-space: nowrap;
+}
+
 .proposal-detail-info h2 {
   font-size: 1.8rem;
   font-weight: 700;
@@ -28,6 +50,7 @@
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #eee;
+  margin-bottom: 30px;
 }
 
 .info-item {
@@ -65,4 +88,16 @@
 
 .info-value.dates {
   font-style: italic;
+}
+
+@media (max-width: 768px) {
+  .proposal-header-section {
+    flex-direction: column;
+    gap: 15px;
+    align-items: flex-start;
+  }
+
+  .create-notice-button {
+    width: 100%;
+  }
 }

@@ -1,21 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { fetchNoticeById } from '../../services/noticeService';
+import { fetchNoticeById, deleteNotice } from '../../services/noticeService';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
 import NoticeDetailInfo from '../../components/NoticeDetailInfo/NoticeDetailInfo';
 import NoticeAttachments from '../../components/NoticeAttachments/NoticeAttachments';
+import EditNoticeModal from '../../components/EditNoticeModal/EditNoticeModal';
+import ConfirmationModal from '../../components/ConfirmationModal/ConfirmationModal';
 import { formatDateCroatian } from '../../utils/formatters';
 import './NoticeDetailPage.css';
 
 function NoticeDetailPage() {
     const { noticeId } = useParams();
+    const navigate = useNavigate();
 
     const [notice, setNotice] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const [activeTab, setActiveTab] = useState('details');
-
-    const navigate = useNavigate();
+    
+    // Edit modal state
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+    
+    // Delete modal state
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     const goBack = () => {
         navigate(-1);
@@ -44,6 +52,46 @@ function NoticeDetailPage() {
 
         loadNotice();
     }, [noticeId]);
+
+    const handleEdit = useCallback((noticeToEdit) => {
+        setIsEditModalOpen(true);
+    }, []);
+
+    const handleEditModalClose = () => {
+        setIsEditModalOpen(false);
+    };
+
+    const handleNoticeUpdated = (updatedNotice) => {
+        setNotice(updatedNotice);
+        setIsEditModalOpen(false);
+    };
+    
+    const handleDeleteModalClose = () => {
+        if (!isDeleting) {
+            setIsDeleteModalOpen(false);
+        }
+    };
+
+    const handleConfirmDelete = async () => {
+        setIsDeleting(true);
+        try {
+            await deleteNotice(noticeId);
+            // Navigate back to notices list or proposal
+            if (notice?.proposal?.id) {
+                navigate(`/proposals/${notice.proposal.id}`, { 
+                    state: { activeTab: 'notices', message: 'Obavijest uspješno obrisana.' } 
+                });
+            } else {
+                navigate('/notices', { 
+                    state: { message: 'Obavijest uspješno obrisana.' } 
+                });
+            }
+        } catch (err) {
+            setError(err.message || 'Brisanje obavijesti nije uspjelo.');
+            setIsDeleting(false);
+            setIsDeleteModalOpen(false);
+        }
+    };
 
     const renderHeader = () => {
         if (isLoading || error || !notice) return null;
@@ -80,11 +128,11 @@ function NoticeDetailPage() {
 
         switch (activeTab) {
             case 'details':
-                return <NoticeDetailInfo notice={notice} />;
+                return <NoticeDetailInfo notice={notice} onEdit={handleEdit} />;
             case 'attachments':
                 return <NoticeAttachments noticeId={notice.id} />;
             default:
-                return <NoticeDetailInfo notice={notice} />;
+                return <NoticeDetailInfo notice={notice} onEdit={handleEdit} />;
         }
     };
 
@@ -113,6 +161,28 @@ function NoticeDetailPage() {
                         {renderTabContent()}
                     </div>
                 </div>
+            )}
+
+            {notice && (
+                <>
+                    <EditNoticeModal
+                        isOpen={isEditModalOpen}
+                        onClose={handleEditModalClose}
+                        notice={notice}
+                        onNoticeUpdated={handleNoticeUpdated}
+                    />
+                    
+                    <ConfirmationModal
+                        isOpen={isDeleteModalOpen}
+                        onClose={handleDeleteModalClose}
+                        onConfirm={handleConfirmDelete}
+                        title="Potvrdi brisanje obavijesti"
+                        message={`Jeste li sigurni da želite obrisati obavijest "${notice.title}"? Ova akcija ne može biti poništena.`}
+                        confirmText="Obriši"
+                        cancelText="Odustani"
+                        isLoading={isDeleting}
+                    />
+                </>
             )}
         </>
     );

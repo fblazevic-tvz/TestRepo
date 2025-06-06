@@ -7,7 +7,7 @@ namespace IzjasniSe.Api.Dtos
         [MaxLength(150)]
         public string? Title { get; set; } = null!;
         public string? Content { get; set; } = null!;
-        public int? ProposalId { get; set; }
-        public int? ModeratorId { get; set; }
+        public int ProposalId { get; set; }
+        public int ModeratorId { get; set; }
     }
 }

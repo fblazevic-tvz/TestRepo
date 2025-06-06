@@ -47,7 +47,7 @@ namespace IzjasniSe.Api.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Moderator")]
         public async Task<ActionResult<Notice>> Create([FromBody] NoticeCreateDto noticeCreateDto)
         {
             if (!ModelState.IsValid)
