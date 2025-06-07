@@ -23,7 +23,7 @@
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  margin-top: 4px;
+  margin: 4px 0 0 0;
   transition: background-color 0.2s ease;
 }
 
@@ -225,8 +225,9 @@
 }
 
 .comment-replies {
-  margin-top: 16px;
-  margin-left: 32px;
+  list-style: none;
+  padding: 0;
+  margin: 16px 0 0 32px;
   padding-left: 24px;
   border-left: 3px solid #e9ecef;
 }

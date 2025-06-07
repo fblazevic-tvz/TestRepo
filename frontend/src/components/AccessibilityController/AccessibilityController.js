@@ -3,11 +3,10 @@ import './AccessibilityController.css';
 
 function AccessibilityController() {
   const [isOpen, setIsOpen] = useState(false);
-  const [fontSize, setFontSize] = useState(100); // Percentage value
+  const [fontSize, setFontSize] = useState(100);
   const [isDyslexicFont, setIsDyslexicFont] = useState(false);
   const [isHighContrast, setIsHighContrast] = useState(false);
-  
-  // Load saved preferences from localStorage on mount
+
   useEffect(() => {
     const savedFontSize = localStorage.getItem('appFontSize');
     const savedDyslexicFont = localStorage.getItem('appDyslexicFont');
@@ -36,19 +35,14 @@ function AccessibilityController() {
 
   const applyDyslexicFont = (isEnabled) => {
     if (isEnabled) {
-
       document.documentElement.style.setProperty('--app-font-family', 'OpenDyslexic, Roboto, Arial, sans-serif');
       document.documentElement.classList.add('dyslexic-font');
-
-      // Add more spacing for better readability
       document.body.style.letterSpacing = '0.12em';
       document.body.style.wordSpacing = '0.16em';
       document.body.style.lineHeight = '1.8';
     } else {
-      // Reset to original font
       document.documentElement.style.setProperty('--app-font-family', "'Roboto', sans-serif");
       document.documentElement.classList.remove('dyslexic-font');
-
       document.body.style.letterSpacing = 'normal';
       document.body.style.wordSpacing = 'normal';
       document.body.style.lineHeight = 'normal';
@@ -84,18 +78,16 @@ function AccessibilityController() {
     localStorage.setItem('appHighContrast', newValue.toString());
   };
 
-  const resetAllSettings = () => {
-    // Reset font size
+  const handleFormReset = (e) => {
+    e.preventDefault();
     setFontSize(100);
     applyFontSize(100);
     localStorage.setItem('appFontSize', '100');
     
-    // Reset dyslexic font
     setIsDyslexicFont(false);
     applyDyslexicFont(false);
     localStorage.setItem('appDyslexicFont', 'false');
     
-    // Reset high contrast
     setIsHighContrast(false);
     applyHighContrast(false);
     localStorage.setItem('appHighContrast', 'false');
@@ -112,6 +104,7 @@ function AccessibilityController() {
         onClick={toggleOpen}
         aria-label="Postavke pristupačnosti"
         title="Postavke pristupačnosti"
+        aria-expanded={isOpen}
       >
         <svg className="accessibility-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
           <circle cx="12" cy="12" r="10" />
@@ -124,12 +117,11 @@ function AccessibilityController() {
       </button>
       
       {isOpen && (
-        <div className="accessibility-panel">
+        <form className="accessibility-panel" onReset={handleFormReset}>
           <h3 className="panel-title">Postavke pristupačnosti</h3>
           
-          {/* Font Size Section */}
-          <div className="control-section">
-            <h4 className="section-title">Veličina pisma</h4>
+          <fieldset className="control-section">
+            <legend className="section-title">Veličina pisma</legend>
             <div className="font-size-display">
               <span className="size-value">{fontSize}%</span>
             </div>
@@ -146,13 +138,10 @@ function AccessibilityController() {
               />
               <span className="slider-label-max">A</span>
             </div>
-          </div>
+          </fieldset>
 
-          {/* Dyslexic Font Toggle */}
-          <div className="control-section">
-            <h4 className="section-title">Prilagodba disleksiji</h4>
-            <p className="section-description">
-            </p>
+          <fieldset className="control-section">
+            <legend className="section-title">Prilagodba disleksiji</legend>
             <label className="toggle-switch">
               <input
                 type="checkbox"
@@ -162,13 +151,10 @@ function AccessibilityController() {
               />
               <span className="toggle-slider"></span>
             </label>
-          </div>
+          </fieldset>
 
-          {/* High Contrast Toggle */}
-          <div className="control-section">
-            <h4 className="section-title">Prilagodba slabovidnosti</h4>
-            <p className="section-description">
-            </p>
+          <fieldset className="control-section">
+            <legend className="section-title">Prilagodba slabovidnosti</legend>
             <label className="toggle-switch">
               <input
                 type="checkbox"
@@ -178,15 +164,15 @@ function AccessibilityController() {
               />
               <span className="toggle-slider"></span>
             </label>
-          </div>
+          </fieldset>
           
           <button 
+            type="reset"
             className="reset-button"
-            onClick={resetAllSettings}
           >
             Vrati sve na zadano
           </button>
-        </div>
+        </form>
       )}
     </div>
   );

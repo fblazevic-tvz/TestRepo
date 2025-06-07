@@ -103,19 +103,19 @@
     .edit-notice-modal {
         margin: 16px;
     }
-    
+
     .edit-notice-modal .modal-header,
     .edit-notice-modal .modal-body,
     .edit-notice-modal .modal-actions {
         padding-left: 20px;
         padding-right: 20px;
     }
-    
+
     .edit-notice-modal .modal-actions {
         flex-direction: column-reverse;
         gap: 8px;
     }
-    
+
     .edit-notice-modal .modal-button {
         width: 100%;
     }

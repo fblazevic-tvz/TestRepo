@@ -60,7 +60,7 @@ function CreateNoticeModal({ isOpen, onClose, proposalId, moderatorId, onNoticeC
     return (
         <div className="modal-overlay" onClick={handleClose} role="dialog" aria-modal="true">
             <div className="modal-content create-notice-modal" onClick={handleModalContentClick}>
-                <div className="modal-header">
+                <header className="modal-header">
                     <h2 className="modal-title">Nova obavijest</h2>
                     <button
                         type="button"
@@ -71,7 +71,7 @@ function CreateNoticeModal({ isOpen, onClose, proposalId, moderatorId, onNoticeC
                     >
                         ×
                     </button>
-                </div>
+                </header>
 
                 <form onSubmit={handleSubmit} noValidate>
                     <div className="modal-body">
@@ -115,7 +115,7 @@ function CreateNoticeModal({ isOpen, onClose, proposalId, moderatorId, onNoticeC
                         </div>
                     </div>
 
-                    <div className="modal-actions">
+                    <footer className="modal-actions">
                         <button
                             type="button"
                             onClick={handleClose}
@@ -131,7 +131,7 @@ function CreateNoticeModal({ isOpen, onClose, proposalId, moderatorId, onNoticeC
                         >
                             {isSubmitting ? 'Objavljuje se...' : 'Objavi obavijest'}
                         </button>
-                    </div>
+                    </footer>
                 </form>
             </div>
         </div>

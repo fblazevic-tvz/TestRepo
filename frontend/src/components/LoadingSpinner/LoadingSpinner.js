@@ -3,8 +3,8 @@ import './LoadingSpinner.css';
 
 function LoadingSpinner() {
   return (
-    <div className="spinner-container">
-      <div className="loading-spinner">
+    <div className="spinner-container" role="status">
+      <div className="loading-spinner" aria-hidden="true">
       </div>
       <p className="spinner-text">Loading...</p>
     </div>

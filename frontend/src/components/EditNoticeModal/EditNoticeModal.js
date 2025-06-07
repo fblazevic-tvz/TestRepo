@@ -76,7 +76,7 @@ function EditNoticeModal({ isOpen, onClose, notice, onNoticeUpdated }) {
     return (
         <div className="modal-overlay" onClick={handleClose} role="dialog" aria-modal="true">
             <div className="modal-content edit-notice-modal" onClick={handleModalContentClick}>
-                <div className="modal-header">
+                <header className="modal-header">
                     <h2 className="modal-title">Uredi obavijest</h2>
                     <button
                         type="button"
@@ -87,7 +87,7 @@ function EditNoticeModal({ isOpen, onClose, notice, onNoticeUpdated }) {
                     >
                         ×
                     </button>
-                </div>
+                </header>
 
                 <form onSubmit={handleSubmit} noValidate>
                     <div className="modal-body">
@@ -131,7 +131,7 @@ function EditNoticeModal({ isOpen, onClose, notice, onNoticeUpdated }) {
                         </div>
                     </div>
 
-                    <div className="modal-actions">
+                    <footer className="modal-actions">
                         <button
                             type="button"
                             onClick={handleClose}
@@ -147,7 +147,7 @@ function EditNoticeModal({ isOpen, onClose, notice, onNoticeUpdated }) {
                         >
                             {isSubmitting ? 'Spremanje...' : 'Spremi promjene'}
                         </button>
-                    </div>
+                    </footer>
                 </form>
             </div>
         </div>

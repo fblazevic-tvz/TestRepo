@@ -176,19 +176,19 @@
     .create-notice-modal {
         margin: 16px;
     }
-    
+
     .create-notice-modal .modal-header,
     .create-notice-modal .modal-body,
     .create-notice-modal .modal-actions {
         padding-left: 20px;
         padding-right: 20px;
     }
-    
+
     .create-notice-modal .modal-actions {
         flex-direction: column-reverse;
         gap: 8px;
     }
-    
+
     .create-notice-modal .modal-button {
         width: 100%;
     }

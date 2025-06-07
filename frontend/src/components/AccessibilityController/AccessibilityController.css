@@ -1,4 +1,3 @@
-/* Import OpenDyslexic font */
 @import url('https://fonts.cdnfonts.com/css/opendyslexic');
 
 .accessibility-controller {
@@ -23,7 +22,7 @@
   justify-content: center;
   transition: all 0.3s ease;
   position: relative;
-  font-size: 16px !important; /* Ensure button isn't affected */
+  font-size: 16px !important;
 }
 
 .accessibility-toggle-button:hover {
@@ -66,7 +65,7 @@
 }
 
 .panel-title {
-  font-size: 19.2px !important; /* Was 1.2rem, now fixed */
+  font-size: 19.2px !important; 
   font-weight: 600;
   color: #343a40;
   margin: 0 0 20px 0;
@@ -76,6 +75,9 @@
 }
 
 .control-section {
+  border: none;
+  margin: 0;
+  padding: 0;
   margin-bottom: 24px;
   padding-bottom: 20px;
   border-bottom: 1px solid #f0f0f0;
@@ -86,14 +88,15 @@
 }
 
 .section-title {
-  font-size: 16px !important; /* Was 1rem, now fixed */
+  padding: 0;
+  font-size: 16px !important; 
   font-weight: 600;
   color: #495057;
   margin: 0 0 8px 0;
 }
 
 .section-description {
-  font-size: 14px !important; /* Was 0.875rem, now fixed */
+  font-size: 14px !important; 
   color: #6c757d;
   margin: 0 0 12px 0;
   line-height: 1.4;
@@ -106,7 +109,7 @@
 }
 
 .size-value {
-  font-size: 24px !important; /* Was 1.5rem, now fixed */
+  font-size: 24px !important; 
   font-weight: 700;
   color: #0F62FE;
 }
@@ -119,13 +122,13 @@
 }
 
 .slider-label-min {
-  font-size: 14px !important; /* Was 0.875rem, now fixed */
+  font-size: 14px !important; 
   color: #6c757d;
   font-weight: 500;
 }
 
 .slider-label-max {
-  font-size: 20px !important; /* Was 1.25rem, now fixed */
+  font-size: 20px !important; 
   color: #6c757d;
   font-weight: 500;
 }
@@ -169,7 +172,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Toggle Switch Styles */
 .toggle-switch {
   position: relative;
   display: inline-block;
@@ -219,7 +221,7 @@
   width: 100%;
   padding: 12px;
   margin-top: 20px;
-  font-size: 15.2px !important; /* Was 0.95rem, now fixed */
+  font-size: 15.2px !important; 
   font-weight: 500;
   background-color: transparent;
   border: 2px solid #6c757d;
@@ -234,27 +236,21 @@
   color: #ffffff;
 }
 
-/* High Contrast Mode Styles */
 .high-contrast {
-  /* Background colors */
   --bg-primary: #000000 !important;
   --bg-secondary: #1a1a1a !important;
   --bg-light: #2d2d2d !important;
   
-  /* Text colors */
   --text-primary: #ffffff !important;
   --text-secondary: #f0f0f0 !important;
   --text-muted: #cccccc !important;
   
-  /* Border colors */
   --border-color: #ffffff !important;
   
-  /* Primary colors */
   --primary: #ffff00 !important;
   --primary-hover: #ffff33 !important;
 }
 
-/* Apply high contrast to your app */
 .high-contrast body {
   background-color: var(--bg-primary) !important;
   color: var(--text-primary) !important;
@@ -304,13 +300,11 @@
   border-top-color: var(--border-color) !important;
 }
 
-/* Global font override when dyslexic font is enabled */
 .dyslexic-font,
 .dyslexic-font * {
   font-family: OpenDyslexic, Comic Sans MS, Arial, sans-serif !important;
 }
 
-/* Ensure all text elements inherit the font */
 .dyslexic-font body,
 .dyslexic-font input,
 .dyslexic-font textarea,
@@ -337,7 +331,6 @@
   font-family: OpenDyslexic, Comic Sans MS, Arial, sans-serif !important;
 }
 
-/* Responsive adjustments */
 @media (max-width: 768px) {
   .accessibility-controller {
     bottom: 80px;
@@ -355,22 +348,19 @@
   }
   
   .accessibility-panel {
-  position: absolute;
-  bottom: 70px;
-  right: 0;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  padding: 24px;
-  width: 320px;
-  animation: slideUp 0.3s ease-out;
-  border: 1px solid #e9ecef;
-  
-  /* Reset font size to be independent of root font size */
-  font-size: 16px !important;
-}
-.accessibility-panel * {
-  /* Reset any inherited font-size changes */
-  font-size: inherit !important;
-}
+    position: absolute;
+    bottom: 70px;
+    right: 0;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 24px;
+    width: 320px;
+    animation: slideUp 0.3s ease-out;
+    border: 1px solid #e9ecef;
+    font-size: 16px !important;
+  }
+  .accessibility-panel * {
+    font-size: inherit !important;
+  }
 }
