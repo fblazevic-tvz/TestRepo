@@ -26,7 +26,6 @@ function NoticeCard({ notice, onEdit, onDelete }) {
     const proposalName = proposal?.name || "Općenito";
     const moderatorName = moderator?.userName || "System";
 
-    // Check if current user is the moderator who created this notice
     const isNoticeModerator = isAuthenticated && 
                               user?.role === 'Moderator' && 
                               moderatorId && 
@@ -59,8 +58,8 @@ function NoticeCard({ notice, onEdit, onDelete }) {
     };
 
     return (
-        <div className="notice-card">
-            <div className="notice-card-image-container">
+        <article className="notice-card">
+            <figure className="notice-card-image-container">
                 <img
                     src="/notice.webp"
                     alt="Vizualni prikaz za obavijest"
@@ -68,18 +67,18 @@ function NoticeCard({ notice, onEdit, onDelete }) {
                     loading="lazy"
                     onClick={goToDetails}
                 />
-            </div>
+            </figure>
             <div className="notice-card-content">
-                <div className="notice-card-title-category">
+                <header className="notice-card-title-category">
                     <p className="notice-card-category">{proposalName}</p>
                     <h3 className="notice-card-title">{title}</h3>
                     <p className="notice-card-meta">
                         Objavio: {moderatorName} | Datum: {formatDateCroatian(createdAt)}
                     </p>
-                </div>
+                </header>
                 <p className="notice-card-paragraph">{shortContent}</p>
             </div>
-            <div className="notice-card-buttons-group">
+            <footer className="notice-card-buttons-group">
                 <button onClick={goToDetails} className="notice-card-button-secondary">
                     Pročitaj više
                 </button>
@@ -106,8 +105,8 @@ function NoticeCard({ notice, onEdit, onDelete }) {
                         </Tooltip>
                     </div>
                 )}
-            </div>
-        </div>
+            </footer>
+        </article>
     );
 }
 

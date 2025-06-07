@@ -52,8 +52,8 @@ function ProposalCard({ proposal, showActions = false, onEdit, onDelete }) {
         : description;
 
     return (
-        <div className="proposal-card">
-            <div className="proposal-card-image-container">
+        <article className="proposal-card">
+            <figure className="proposal-card-image-container">
                 <img
                     src="/proposal.jpg"
                     alt="Vizualni prikaz za natječaj"
@@ -61,15 +61,15 @@ function ProposalCard({ proposal, showActions = false, onEdit, onDelete }) {
                     loading="lazy"
                     onClick={goToDetails}
                 />
-            </div>
+            </figure>
 
             <div className="proposal-card-content">
-                <div className="proposal-card-title-category">
+                <header className="proposal-card-title-category">
                     <p className="proposal-card-category">{cityName}</p>
                     <h3 className="proposal-card-title">{name}</h3>
                     <p className="proposal-card-category status">Status: {status}</p>
                     <p className="proposal-card-category budget">Budžet: {formatCurrencyEuroCroatian(maxBudget)}</p>
-                </div>
+                </header>
 
                 <p className="proposal-card-paragraph">{shortDescription}</p>
 
@@ -82,13 +82,13 @@ function ProposalCard({ proposal, showActions = false, onEdit, onDelete }) {
                         <span className="proposal-user-role">Moderator</span>
                     </div>
                 </div>
-
-                <div className="proposal-card-dates">
-                    <span>Trajanje natječaja: {formatDateCroatian(submissionStart)} - {formatDateCroatian(submissionEnd)}</span>
-                </div>
+                
+                <p className="proposal-card-dates">
+                    Trajanje natječaja: {formatDateCroatian(submissionStart)} - {formatDateCroatian(submissionEnd)}
+                </p>
             </div>
-
-            <div className="proposal-card-buttons-group">
+            
+            <footer className="proposal-card-buttons-group">
                 <button onClick={goToDetails} className="proposal-card-button-primary">Detalji</button>
                 
                 {showActions && (
@@ -113,8 +113,8 @@ function ProposalCard({ proposal, showActions = false, onEdit, onDelete }) {
                         </Tooltip>
                     </div>
                 )}
-            </div>
-        </div>
+            </footer>
+        </article>
     );
 }
 
@@ -126,14 +126,14 @@ ProposalCard.propTypes = {
         maxBudget: PropTypes.number,
         submissionStart: PropTypes.string,
         submissionEnd: PropTypes.string,
-        status: PropTypes.number,
+        status: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         city: PropTypes.shape({
             id: PropTypes.number,
             name: PropTypes.string,
         }),
         moderator: PropTypes.shape({
             id: PropTypes.number,
-            username: PropTypes.string,
+            userName: PropTypes.string,
         }),
     }).isRequired,
     showActions: PropTypes.bool,

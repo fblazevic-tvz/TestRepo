@@ -50,7 +50,7 @@
   padding: 20px;
   border-radius: 8px;
   border: 1px solid #eee;
-  margin-bottom: 30px;
+  margin: 0 0 30px 0;
 }
 
 .info-item {
@@ -75,6 +75,7 @@
   font-size: 1rem;
   font-weight: 400;
   color: #21272A;
+  margin: 0;
 }
 
 .info-value.status {

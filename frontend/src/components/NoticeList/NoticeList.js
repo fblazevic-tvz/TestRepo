@@ -5,20 +5,21 @@ import './NoticeList.css';
 
 function NoticeList({ notices, onEdit, onDelete }) {
   if (!notices || notices.length === 0) {
-    return null; 
+    return null;
   }
 
   return (
-    <div className="notice-list-container">
+    <ul className="notice-list-container">
       {notices.map((notice) => (
-        <NoticeCard 
-          key={notice.id} 
-          notice={notice}
-          onEdit={onEdit}
-          onDelete={onDelete}
-        />
+        <li key={notice.id}>
+          <NoticeCard
+            notice={notice}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
 

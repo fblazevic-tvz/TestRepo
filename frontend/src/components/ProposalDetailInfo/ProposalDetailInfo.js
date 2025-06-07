@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { useAuth } from '../../context/AuthContext';
 import CreateNoticeModal from '../CreateNoticeModal/CreateNoticeModal';
-import './ProposalDetailInfo.css'; 
+import './ProposalDetailInfo.css';
 import { formatDateCroatian, formatCurrencyEuroCroatian } from '../../utils/formatters';
 
 function ProposalDetailInfo({ proposal, onNoticeCreated }) {
@@ -28,11 +28,10 @@ function ProposalDetailInfo({ proposal, onNoticeCreated }) {
     const cityName = city?.name || "Nije dostupno";
     const cityPostcode = city?.postcode || "N/A";
     const moderatorName = moderator?.userName || "Nije dostupno";
-    
-    // Check if current user is the moderator of this proposal
-    const isProposalModerator = isAuthenticated && 
-                                user?.role === 'Moderator' && 
-                                moderatorId && 
+
+    const isProposalModerator = isAuthenticated &&
+                                user?.role === 'Moderator' &&
+                                moderatorId &&
                                 parseInt(user.userId) === moderatorId;
 
     const handleCreateNotice = () => {
@@ -48,49 +47,50 @@ function ProposalDetailInfo({ proposal, onNoticeCreated }) {
             onNoticeCreated(newNotice);
         }
     };
-    
+
     return (
         <>
-            <div className="proposal-detail-info">
-                <div className="proposal-header-section">
+            <section className="proposal-detail-info">
+                <header className="proposal-header-section">
                     <h2>Detalji natječaja</h2>
                     {isProposalModerator && (
-                        <button 
+                        <button
                             onClick={handleCreateNotice}
                             className="button-primary create-notice-button"
                         >
                             Stvori novu obavijest
                         </button>
                     )}
-                </div>
-                
-                <div className="info-grid">
+                </header>
+
+                <dl className="info-grid">
                     <div className="info-item">
-                        <span className="info-label">Status:</span>
-                        <span className="info-value status">{status}</span>
+                        <dt className="info-label">Status:</dt>
+                        <dd className="info-value status">{status}</dd>
                     </div>
                     <div className="info-item">
-                        <span className="info-label">Maksimalni budžet:</span>
-                        <span className="info-value budget">{formatCurrencyEuroCroatian(maxBudget)}</span>
+                        <dt className="info-label">Maksimalni budžet:</dt>
+                        <dd className="info-value budget">{formatCurrencyEuroCroatian(maxBudget)}</dd>
                     </div>
-                     <div className="info-item">
-                        <span className="info-label">Period prijave:</span>
-                        <span className="info-value dates">
+                    <div className="info-item">
+                        <dt className="info-label">Period prijave:</dt>
+                        <dd className="info-value dates">
                             {formatDateCroatian(submissionStart)} - {formatDateCroatian(submissionEnd)}
-                        </span>
+                        </dd>
                     </div>
                     <div className="info-item">
-                        <span className="info-label">Grad:</span>
-                        <span className="info-value city">{cityName} ({cityPostcode})</span>
+                        <dt className="info-label">Grad:</dt>
+                        <dd className="info-value city">{cityName} ({cityPostcode})</dd>
                     </div>
                     <div className="info-item">
-                        <span className="info-label">Moderator:</span>
-                         <span className="info-value moderator">{moderatorName}</span>
+                        <dt className="info-label">Moderator:</dt>
+                        <dd className="info-value moderator">{moderatorName}</dd>
                     </div>
-                </div>
+                </dl>
+
                 <h2>Opis</h2>
                 <p className="proposal-description">{description}</p>
-            </div>
+            </section>
 
             {isProposalModerator && (
                 <CreateNoticeModal

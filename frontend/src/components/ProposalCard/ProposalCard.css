@@ -16,6 +16,8 @@
 }
 
 .proposal-card-image-container {
+  /* This class is now on a <figure> element */
+  margin: 0; /* ADDED: Reset default margin from the figure element */
   width: 100%;
   height: 180px;
   background-color: #e0e0e0;
@@ -198,6 +200,8 @@
 }
 
 .proposal-card-dates {
+  /* This class is now on a <p> element */
+  margin: 0; /* ADDED: Reset default margin from the paragraph element */
   font-size: 0.75rem;
   color: #697077;
   padding-top: 5px;

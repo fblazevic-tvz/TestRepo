@@ -10,7 +10,7 @@ function NoticeAttachments({ noticeId }) {
     ];
 
     return (
-        <div className="notice-attachments">
+        <section className="notice-attachments">
             <h2>Priloženi dokumenti</h2>
 
             <div className="attachments-list-container">
@@ -29,7 +29,7 @@ function NoticeAttachments({ noticeId }) {
                     <p>Nema priloženih dokumenata za ovu obavijest.</p>
                 )}
             </div>
-        </div>
+        </section>
     );
 }
 

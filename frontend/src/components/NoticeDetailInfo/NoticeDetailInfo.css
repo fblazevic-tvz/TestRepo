@@ -72,7 +72,7 @@
 .sidebar-info-item {
   display: flex;
   flex-direction: column;
-  margin-bottom: 15px;
+  margin: 0 0 15px 0;
   gap: 3px;
 }
 
@@ -86,6 +86,7 @@
 .sidebar-info-value {
   font-size: 0.95rem;
   color: #21272A;
+  margin: 0;
 }
 
 .sidebar-info-value.dates {

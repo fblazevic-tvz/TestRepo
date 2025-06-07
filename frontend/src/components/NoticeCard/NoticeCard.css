@@ -23,6 +23,7 @@
   flex-shrink: 0;
   border-bottom: 1px solid #DDE1E6;
   position: relative;
+  margin: 0;
 }
 
 .notice-card-image {
@@ -30,7 +31,6 @@
   width: 100%;
   height: 100%;
   cursor: pointer;
-  object-fit: cover;
   object-fit: contain;
   object-position: center center;
   transition: transform 0.3s ease;

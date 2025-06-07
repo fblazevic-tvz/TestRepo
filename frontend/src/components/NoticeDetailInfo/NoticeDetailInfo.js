@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
-import { formatDateCroatian, formatCurrencyEuroCroatian } from '../../utils/formatters'; 
+import { formatDateCroatian, formatCurrencyEuroCroatian } from '../../utils/formatters';
 import './NoticeDetailInfo.css';
 
 function NoticeDetailInfo({ notice, onEdit }) {
     const { user, isAuthenticated } = useAuth();
-    
+
     if (!notice) {
         return <p>Podaci o obavijesti nisu dostupni.</p>;
     }
@@ -16,9 +16,9 @@ function NoticeDetailInfo({ notice, onEdit }) {
         id,
         content = "Nema sadržaja.",
         createdAt = null,
-        moderator: noticeModerator = null, 
+        moderator: noticeModerator = null,
         moderatorId = null,
-        proposal = null, 
+        proposal = null,
     } = notice;
 
     const {
@@ -28,17 +28,17 @@ function NoticeDetailInfo({ notice, onEdit }) {
         submissionEnd = null,
         status: proposalStatus = null,
         city = null,
-        moderator: proposalModerator = null, 
-    } = proposal || {}; 
+        moderator: proposalModerator = null,
+    } = proposal || {};
 
     const noticeModeratorName = noticeModerator?.userName || "System";
     const proposalModeratorName = proposalModerator?.userName || "N/A";
     const cityName = city?.name || "N/A";
     const cityPostcode = city?.postcode || "N/A";
 
-    const isNoticeModerator = isAuthenticated && 
-                              user?.role === 'Moderator' && 
-                              moderatorId && 
+    const isNoticeModerator = isAuthenticated &&
+                              user?.role === 'Moderator' &&
+                              moderatorId &&
                               parseInt(user.userId) === moderatorId;
 
     const handleEditClick = () => {
@@ -49,48 +49,48 @@ function NoticeDetailInfo({ notice, onEdit }) {
 
     return (
         <div className="notice-detail-layout">
-            <div className="notice-content-main">
-                <div className="notice-content-header">
+            <main className="notice-content-main">
+                <header className="notice-content-header">
                     <h3>Sadržaj obavijesti</h3>
                     {isNoticeModerator && (
-                        <button 
+                        <button
                             onClick={handleEditClick}
                             className="button-secondary edit-notice-button"
                         >
                             Uredi obavijest
                         </button>
                     )}
-                </div>
+                </header>
                 <p className="notice-content-text">{content}</p>
-                 <p className="notice-meta">Objavljeno: {formatDateCroatian(createdAt)} | Autor: {noticeModeratorName}</p>
-            </div>
+                <footer className="notice-meta">Objavljeno: {formatDateCroatian(createdAt)} | Autor: {noticeModeratorName}</footer>
+            </main>
 
             <aside className="proposal-info-sidebar">
                 <h4>Informacije o natječaju</h4>
-                <div className="sidebar-info-item">
-                    <span className="sidebar-info-label">Natječaj:</span>
-                    <span className="sidebar-info-value">{proposalName}</span>
-                </div>
-                <div className="sidebar-info-item">
-                    <span className="sidebar-info-label">Status natječaja:</span>
-                    <span className="sidebar-info-value">{proposalStatus}</span>
-                </div>
-                <div className="sidebar-info-item">
-                    <span className="sidebar-info-label">Budžet:</span>
-                    <span className="sidebar-info-value">{formatCurrencyEuroCroatian(maxBudget)}</span>
-                </div>
-                 <div className="sidebar-info-item">
-                    <span className="sidebar-info-label">Period prijave:</span>
-                    <span className="sidebar-info-value dates">{formatDateCroatian(submissionStart)} - {formatDateCroatian(submissionEnd)}</span>
-                </div>
-                 <div className="sidebar-info-item">
-                    <span className="sidebar-info-label">Grad:</span>
-                    <span className="sidebar-info-value">{cityName} ({cityPostcode})</span>
-                </div>
-                 <div className="sidebar-info-item">
-                    <span className="sidebar-info-label">Moderator natječaja:</span>
-                    <span className="sidebar-info-value">{proposalModeratorName}</span>
-                </div>
+                <dl className="sidebar-info-item">
+                    <dt className="sidebar-info-label">Natječaj:</dt>
+                    <dd className="sidebar-info-value">{proposalName}</dd>
+                </dl>
+                <dl className="sidebar-info-item">
+                    <dt className="sidebar-info-label">Status natječaja:</dt>
+                    <dd className="sidebar-info-value">{proposalStatus}</dd>
+                </dl>
+                <dl className="sidebar-info-item">
+                    <dt className="sidebar-info-label">Budžet:</dt>
+                    <dd className="sidebar-info-value">{formatCurrencyEuroCroatian(maxBudget)}</dd>
+                </dl>
+                <dl className="sidebar-info-item">
+                    <dt className="sidebar-info-label">Period prijave:</dt>
+                    <dd className="sidebar-info-value dates">{formatDateCroatian(submissionStart)} - {formatDateCroatian(submissionEnd)}</dd>
+                </dl>
+                <dl className="sidebar-info-item">
+                    <dt className="sidebar-info-label">Grad:</dt>
+                    <dd className="sidebar-info-value">{cityName} ({cityPostcode})</dd>
+                </dl>
+                <dl className="sidebar-info-item">
+                    <dt className="sidebar-info-label">Moderator natječaja:</dt>
+                    <dd className="sidebar-info-value">{proposalModeratorName}</dd>
+                </dl>
 
                 {proposal?.id && (
                      <Link to={`/proposals/${proposal.id}`} className="sidebar-link-to-proposal">
