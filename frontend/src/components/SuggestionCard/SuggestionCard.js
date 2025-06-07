@@ -34,6 +34,19 @@ function SuggestionCard({ suggestion, showActions = false, onEdit, onDelete, onV
     setLocalVoteCount(suggestion?.votes?.length || 0);
   }, [suggestion]);
 
+  // Get the full avatar URL
+  const getAvatarUrl = () => {
+    if (author?.avatarUrl) {
+      if (author.avatarUrl.startsWith('/')) {
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'https://localhost:7003/api';
+        const baseUrl = apiBaseUrl.replace('/api', '');
+        return `${baseUrl}${author.avatarUrl}`;
+      }
+      return author.avatarUrl;
+    }
+    return null;
+  };
+
   const handleVoteToggle = async (e) => {
     e.stopPropagation();
     if (!isAuthenticated) {
@@ -93,15 +106,19 @@ function SuggestionCard({ suggestion, showActions = false, onEdit, onDelete, onV
     }
   };
 
+  const fullAvatarUrl = getAvatarUrl();
+
   return (
     <div className="suggestion-card">
-      <img
-        src="/suggestion.jpg"
-        alt="Vizualni prikaz za prijedlog"
-        className="suggestion-card-image"
-        loading="lazy"
-        onClick={goToDetails}
-      />
+      <div className="suggestion-card-image-container">
+        <img
+          src="/suggestion.jpg"
+          alt="Vizualni prikaz za prijedlog"
+          className="suggestion-card-image"
+          loading="lazy"
+          onClick={goToDetails}
+        />
+      </div>
 
       <div className="suggestion-card-content">
         <div className="suggestion-card-title-category">
@@ -115,7 +132,24 @@ function SuggestionCard({ suggestion, showActions = false, onEdit, onDelete, onV
         <p className="suggestion-card-paragraph">{shortDescription}</p>
 
         <div className="suggestion-card-user-card">
-          <div className="suggestion-user-thumb"><div className="user-icon-suggestion-placeholder-card"></div></div>
+          <div className="suggestion-user-thumb">
+            {fullAvatarUrl ? (
+              <img 
+                src={fullAvatarUrl} 
+                alt={`${authorName} avatar`}
+                className="suggestion-user-avatar-image"
+                onError={(e) => {
+                  console.error('Failed to load avatar:', fullAvatarUrl);
+                  e.target.style.display = 'none';
+                  e.target.nextSibling.style.display = 'block';
+                }}
+              />
+            ) : null}
+            <div 
+              className="user-icon-suggestion-placeholder-card"
+              style={fullAvatarUrl ? { display: 'none' } : {}}
+            ></div>
+          </div>
           <div className="suggestion-user-details">
             <span className="suggestion-user-name">{authorName}</span>
             <span className="suggestion-user-role">Podneseno: {formatDateCroatian(createdAt)}</span>
@@ -173,16 +207,21 @@ SuggestionCard.propTypes = {
     name: PropTypes.string,
     description: PropTypes.string,
     estimatedCost: PropTypes.number,
-    status: PropTypes.number,
+    status: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     createdAt: PropTypes.string,
     proposal: PropTypes.object,
-    author: PropTypes.object,
+    author: PropTypes.shape({
+      id: PropTypes.number,
+      userName: PropTypes.string,
+      avatarUrl: PropTypes.string,
+    }),
     location: PropTypes.object,
     votes: PropTypes.array,
   }).isRequired,
   showActions: PropTypes.bool,
   onEdit: PropTypes.func,
   onDelete: PropTypes.func,
+  onVoteToggled: PropTypes.func,
 };
 
 export default SuggestionCard;

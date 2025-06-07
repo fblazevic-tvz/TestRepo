@@ -18,11 +18,26 @@ function UserCard({ user, onUserStatusChanged }) {
         email = "Nije dostupno",
         role = "User",
         createdAt = null,
-        accountStatus = "Active", 
+        accountStatus = "Active",
+        avatarUrl = null
     } = user || {};
 
     const isActive = accountStatus === "Active";
     const isBanned = accountStatus === "Banned";
+
+    // Get the full avatar URL
+    const getAvatarUrl = () => {
+        if (avatarUrl) {
+            if (avatarUrl.startsWith('/')) {
+                // Extract base URL without /api
+                const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'https://localhost:7003/api';
+                const baseUrl = apiBaseUrl.replace('/api', '');
+                return `${baseUrl}${avatarUrl}`;
+            }
+            return avatarUrl;
+        }
+        return null;
+    };
 
     const goToDetails = () => {
         if (id) {
@@ -52,11 +67,28 @@ function UserCard({ user, onUserStatusChanged }) {
         }
     };
 
+    const fullAvatarUrl = getAvatarUrl();
+
     return (
         <div className="user-card">
             <div className="user-card-header">
                 <div className="user-card-avatar">
-                    <div className="user-icon-placeholder-card"></div>
+                    {fullAvatarUrl ? (
+                        <img 
+                            src={fullAvatarUrl} 
+                            alt={`${userName} avatar`}
+                            className="user-card-avatar-image"
+                            onError={(e) => {
+                                console.error('Failed to load avatar:', fullAvatarUrl);
+                                e.target.style.display = 'none';
+                                e.target.nextSibling.style.display = 'block';
+                            }}
+                        />
+                    ) : null}
+                    <div 
+                        className="user-icon-placeholder-card"
+                        style={fullAvatarUrl ? { display: 'none' } : {}}
+                    ></div>
                 </div>
                 <div className={`user-status-badge ${isActive ? 'active' : 'inactive'}`}>
                     {isActive ? 'Aktivan' : 'Zabranjen'}
@@ -111,7 +143,8 @@ UserCard.propTypes = {
         email: PropTypes.string,
         role: PropTypes.string,
         createdAt: PropTypes.string,
-        accountStatus: PropTypes.number,
+        accountStatus: PropTypes.string,
+        avatarUrl: PropTypes.string,
     }).isRequired,
     onUserStatusChanged: PropTypes.func,
 };

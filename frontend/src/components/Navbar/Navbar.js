@@ -4,10 +4,26 @@ import { useAuth } from '../../context/AuthContext';
 import './Navbar.css';
 
 function Navbar() {
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, logout, user } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // Get the full avatar URL
+  const getAvatarUrl = () => {
+    if (user?.avatarUrl) {
+      // If avatarUrl starts with '/', it's a relative path
+      if (user.avatarUrl.startsWith('/')) {
+        // Extract base URL without /api
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'https://localhost:7003/api';
+        const baseUrl = apiBaseUrl.replace('/api', '');
+        return `${baseUrl}${user.avatarUrl}`;
+      }
+      // Otherwise, assume it's already a full URL
+      return user.avatarUrl;
+    }
+    return null;
+  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -57,6 +73,8 @@ function Navbar() {
   const handleNavLinkClick = () => {
     setIsMobileMenuOpen(false);
   };
+
+  const avatarUrl = getAvatarUrl();
 
   return (
     <div className="navbar-container">
@@ -137,8 +155,23 @@ function Navbar() {
       <div className="navbar-actions">
         {isAuthenticated ? (
           <div className="user-actions">
-            <div className="user-avatar">
-              <div className="user-icon-placeholder"></div>
+            <div className="user-avatar" onClick={() => navigate('/dashboard/settings')}>
+              {avatarUrl ? (
+                <img 
+                  src={avatarUrl} 
+                  alt={user?.username || 'User avatar'} 
+                  className="user-avatar-image"
+                  onError={(e) => {
+                    console.error('Failed to load avatar:', avatarUrl);
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div 
+                className="user-icon-placeholder" 
+                style={avatarUrl ? { display: 'none' } : {}}
+              ></div>
             </div>
             <button onClick={handleLogout} className="logout-button">Odjavi se</button>
           </div>

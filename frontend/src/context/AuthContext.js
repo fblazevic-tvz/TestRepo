@@ -14,6 +14,7 @@ import {
   logoutUser as logoutApi,
 } from "../services/authService";
 import { fetchMyVotedSuggestionIds } from "../services/voteService";
+import { fetchUserById } from "../services/userService";
 
 const AuthContext = createContext(undefined);
 
@@ -47,18 +48,38 @@ export const AuthProvider = ({ children }) => {
     }
   }, [accessToken]);
 
+  // Function to fetch and update user avatar
+  const loadUserAvatar = useCallback(async (userId) => {
+    try {
+      const userData = await fetchUserById(userId);
+      if (userData && userData.avatarUrl) {
+        setUser(prevUser => ({
+          ...prevUser,
+          avatarUrl: userData.avatarUrl
+        }));
+        console.log("[AuthContext] User avatar loaded:", userData.avatarUrl);
+      }
+    } catch (error) {
+      console.error("[AuthContext] Failed to load user avatar:", error);
+    }
+  }, []);
+
   useEffect(() => {
     if (accessToken) {
       api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
       console.log("[AuthContext] Axios header set.");
       loadUserVotes();
+      // Load user avatar when token is set
+      if (user?.userId) {
+        loadUserAvatar(user.userId);
+      }
     } else {
       delete api.defaults.headers.common["Authorization"];
       console.log("[AuthContext] Axios header cleared.");
       setVotedSuggestionIds(new Set());
       console.log("[AuthContext] Cleared votes due to token removal.");
     }
-  }, [accessToken, loadUserVotes]);
+  }, [accessToken, loadUserVotes, loadUserAvatar, user?.userId]);
 
   useEffect(() => {
     let isMounted = true;
@@ -74,6 +95,10 @@ export const AuthProvider = ({ children }) => {
           );
           setUser(loggedInUser);
           setAccessToken(newAccessToken);
+          // Load avatar after initial verification
+          if (loggedInUser?.userId) {
+            loadUserAvatar(loggedInUser.userId);
+          }
         }
       } catch (error) {
         if (isMounted) {
@@ -109,6 +134,10 @@ export const AuthProvider = ({ children }) => {
         "[AuthContext] Setting access token to trigger vote loading..."
       );
       setAccessToken(loginData.accessToken);
+      
+      // Load user avatar after login
+      loadUserAvatar(loginData.userId);
+      
       console.log(
         "[AuthContext] Navigating to",
         redirectTo,
@@ -120,7 +149,7 @@ export const AuthProvider = ({ children }) => {
         console.error("[AuthContext] Error during navigation:", navError);
       }
     },
-    [navigate]
+    [navigate, loadUserAvatar]
   );
 
   const logout = useCallback(async () => {
@@ -154,6 +183,15 @@ export const AuthProvider = ({ children }) => {
     });
   }, []);
 
+  // Function to update user avatar URL
+  const updateUserAvatar = useCallback((avatarUrl) => {
+    setUser(prevUser => ({
+      ...prevUser,
+      avatarUrl
+    }));
+    console.log("[AuthContext] User avatar updated:", avatarUrl);
+  }, []);
+
   const value = useMemo(
     () => ({
       accessToken,
@@ -162,6 +200,7 @@ export const AuthProvider = ({ children }) => {
       isLoading,
       votedSuggestionIds,
       updateUserVoteStatus,
+      updateUserAvatar,
       login,
       logout,
     }),
@@ -171,6 +210,7 @@ export const AuthProvider = ({ children }) => {
       isLoading,
       votedSuggestionIds,
       updateUserVoteStatus,
+      updateUserAvatar,
       login,
       logout,
     ]
@@ -182,11 +222,15 @@ export const AuthProvider = ({ children }) => {
       console.log("AuthContext handling token refresh event.");
       setUser(userData);
       setAccessToken(newAccessToken);
+      // Reload avatar after token refresh
+      if (userData?.userId) {
+        loadUserAvatar(userData.userId);
+      }
     };
     window.addEventListener("token-refreshed", handleTokenRefreshed);
     return () =>
       window.removeEventListener("token-refreshed", handleTokenRefreshed);
-  }, []);
+  }, [loadUserAvatar]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };

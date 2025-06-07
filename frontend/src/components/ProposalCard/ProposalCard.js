@@ -24,6 +24,20 @@ function ProposalCard({ proposal, showActions = false, onEdit, onDelete }) {
 
     const cityName = city?.name || "Nije dostupno";
     const moderatorName = moderator?.userName || "Nije dostupno";
+    const moderatorAvatarUrl = moderator?.avatarUrl || null;
+
+    // Get the full avatar URL
+    const getAvatarUrl = () => {
+        if (moderatorAvatarUrl) {
+            if (moderatorAvatarUrl.startsWith('/')) {
+                const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'https://localhost:7003/api';
+                const baseUrl = apiBaseUrl.replace('/api', '');
+                return `${baseUrl}${moderatorAvatarUrl}`;
+            }
+            return moderatorAvatarUrl;
+        }
+        return null;
+    };
 
     const goToDetails = () => {
         if (id) {
@@ -51,6 +65,8 @@ function ProposalCard({ proposal, showActions = false, onEdit, onDelete }) {
         ? description.substring(0, 100) + '...'
         : description;
 
+    const fullAvatarUrl = getAvatarUrl();
+
     return (
         <article className="proposal-card">
             <figure className="proposal-card-image-container">
@@ -75,7 +91,22 @@ function ProposalCard({ proposal, showActions = false, onEdit, onDelete }) {
 
                 <div className="proposal-card-user-card">
                     <div className="proposal-user-thumb">
-                        <div className="user-icon-proposal-placeholder-card"></div>
+                        {fullAvatarUrl ? (
+                            <img 
+                                src={fullAvatarUrl} 
+                                alt={`${moderatorName} avatar`}
+                                className="proposal-user-avatar-image"
+                                onError={(e) => {
+                                    console.error('Failed to load avatar:', fullAvatarUrl);
+                                    e.target.style.display = 'none';
+                                    e.target.nextSibling.style.display = 'block';
+                                }}
+                            />
+                        ) : null}
+                        <div 
+                            className="user-icon-proposal-placeholder-card"
+                            style={fullAvatarUrl ? { display: 'none' } : {}}
+                        ></div>
                     </div>
                     <div className="proposal-user-details">
                         <span className="proposal-user-name">{moderatorName}</span>
@@ -134,6 +165,7 @@ ProposalCard.propTypes = {
         moderator: PropTypes.shape({
             id: PropTypes.number,
             userName: PropTypes.string,
+            avatarUrl: PropTypes.string,
         }),
     }).isRequired,
     showActions: PropTypes.bool,

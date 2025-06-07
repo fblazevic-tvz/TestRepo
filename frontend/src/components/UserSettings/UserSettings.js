@@ -1,140 +1,180 @@
-import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
-import './UserSettings.css';
-import { formatDateCroatian } from '../../utils/formatters';
+import React, { useState } from 'react';
+import { useAuth } from '../../context/AuthContext';
 import { uploadUserAvatar } from '../../services/userService';
+import './UserSettings.css';
 
-function UserSettings({ user, onUserUpdated }) {
+function UserSettings({ user }) {
+  const { updateUserAvatar } = useAuth();
+  const [userData, setUserData] = useState(user);
   const [isUploading, setIsUploading] = useState(false);
-  const [uploadError, setUploadError] = useState('');
-  const [avatarUrl, setAvatarUrl] = useState(user?.avatarUrl);
-  const fileInputRef = useRef(null);
+  const [error, setError] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
 
-  if (!user) {
-    return (
-      <div className="user-settings-container">
-        <p>Učitavanje korisničkih podataka...</p>
-      </div>
-    );
-  }
-
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
-
-  const handleFileChange = async (event) => {
+  const handleAvatarUpload = async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
     // Validate file type
     const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
     if (!validTypes.includes(file.type)) {
-      setUploadError('Molimo odaberite sliku (JPEG, PNG, GIF ili WebP)');
+      setError('Molimo odaberite važeću sliku (JPEG, PNG, GIF ili WebP)');
       return;
     }
 
     // Validate file size (5MB)
     if (file.size > 5 * 1024 * 1024) {
-      setUploadError('Slika ne smije biti veća od 5MB');
+      setError('Slika mora biti manja od 5MB');
       return;
     }
 
     setIsUploading(true);
-    setUploadError('');
+    setError(null);
+    setSuccessMessage('');
 
     try {
-      const result = await uploadUserAvatar(user.id, file);
-      setAvatarUrl(result.avatarUrl);
+      const response = await uploadUserAvatar(user.id, file);
       
-      // Notify parent component if callback provided
-      if (onUserUpdated) {
-        onUserUpdated({ ...user, avatarUrl: result.avatarUrl });
-      }
-    } catch (error) {
-      setUploadError(error.message || 'Greška pri učitavanju slike');
+      // Update the local user data
+      setUserData(prev => ({
+        ...prev,
+        avatarUrl: response.avatarUrl
+      }));
+
+      // Update the auth context with new avatar URL
+      updateUserAvatar(response.avatarUrl);
+
+      setSuccessMessage('Slika profila uspješno ažurirana!');
+      
+      // Clear success message after 3 seconds
+      setTimeout(() => setSuccessMessage(''), 3000);
+    } catch (err) {
+      console.error('Failed to upload avatar:', err);
+      setError(err.message || 'Greška pri učitavanju slike');
     } finally {
       setIsUploading(false);
     }
   };
 
   const getAvatarUrl = () => {
-    if (avatarUrl) {
-      return `${process.env.REACT_APP_API_BASE_URL.replace('/api', '')}${avatarUrl}`;
+    if (userData.avatarUrl) {
+      if (userData.avatarUrl.startsWith('/')) {
+        const apiBaseUrl = process.env.REACT_APP_API_BASE_URL || 'https://localhost:7003/api';
+        const baseUrl = apiBaseUrl.replace('/api', '');
+        return `${baseUrl}${userData.avatarUrl}`;
+      }
+      return userData.avatarUrl;
     }
     return null;
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('hr-HR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+  };
+
+  const avatarUrl = getAvatarUrl();
+
   return (
-    <div className="user-settings-container">
-      <div className="user-info-card">
-        <div className="user-avatar-section">
-          <div className="user-avatar-large" onClick={handleAvatarClick} style={{ cursor: 'pointer' }}>
-            {getAvatarUrl() ? (
-              <img 
-                src={getAvatarUrl()} 
-                alt="Korisnička slika" 
-                className="user-avatar-image"
-              />
-            ) : (
-              <div className="user-icon-placeholder-large"></div>
-            )}
-            {isUploading && (
-              <div className="avatar-upload-overlay">
-                <div className="upload-spinner"></div>
-              </div>
-            )}
+    <div className="user-settings">
+      <div className="settings-section">
+        <h2>Podaci o korisniku</h2>
+        
+        {error && (
+          <div className="alert alert-danger">
+            {error}
           </div>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            style={{ display: 'none' }}
-          />
-          <button 
-            className="button-secondary change-avatar-button" 
-            onClick={handleAvatarClick}
-            disabled={isUploading}
-          >
-            {isUploading ? 'Učitavanje...' : 'Promijeni sliku'}
-          </button>
-          {uploadError && (
-            <p className="upload-error">{uploadError}</p>
-          )}
+        )}
+        
+        {successMessage && (
+          <div className="alert alert-success">
+            {successMessage}
+          </div>
+        )}
+
+        <div className="avatar-section">
+          <h3>Slika profila</h3>
+          <div className="avatar-upload-container">
+            <div className="current-avatar">
+              {avatarUrl ? (
+                <img 
+                  src={avatarUrl}
+                  alt="Trenutna slika profila" 
+                  className="avatar-preview"
+                  onError={(e) => {
+                    console.error('Failed to load avatar in settings:', avatarUrl);
+                    e.target.style.display = 'none';
+                    e.target.nextSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div 
+                className="avatar-placeholder"
+                style={avatarUrl ? { display: 'none' } : {}}
+              >
+                <span>Nema slike</span>
+              </div>
+            </div>
+            <div className="avatar-upload-controls">
+              <input
+                type="file"
+                id="avatar-upload"
+                accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
+                onChange={handleAvatarUpload}
+                disabled={isUploading}
+                style={{ display: 'none' }}
+              />
+              <label 
+                htmlFor="avatar-upload" 
+                className="button-primary upload-button"
+                style={{ 
+                  cursor: isUploading ? 'not-allowed' : 'pointer',
+                  opacity: isUploading ? 0.6 : 1
+                }}
+              >
+                {isUploading ? 'Učitavanje...' : 'Promijeni sliku'}
+              </label>
+              <p className="upload-hint">Maksimalna veličina: 5MB. Podržani formati: JPEG, PNG, GIF, WebP</p>
+            </div>
+          </div>
         </div>
 
-        <div className="user-details-section">
-          <div className="info-group">
-            <label className="info-label">Korisničko ime</label>
-            <div className="info-value">{user.userName || 'N/A'}</div>
-          </div>
-
-          <div className="info-group">
-            <label className="info-label">Email</label>
-            <div className="info-value">{user.email || 'N/A'}</div>
-          </div>
-
-          <div className="info-group">
-            <label className="info-label">Uloga</label>
-            <div className="info-value role-badge">
-              <span className={`role-tag ${user.role?.toLowerCase() || 'user'}`}>
-                {user.role || 'Korisnik'}
-              </span>
+        <div className="user-info-section">
+          <div className="info-grid">
+            <div className="info-item">
+              <label>Korisničko ime:</label>
+              <p>{userData.userName || 'N/A'}</p>
             </div>
-          </div>
-
-          <div className="info-group">
-            <label className="info-label">Status računa</label>
-            <div className="info-value">
-              <span className={`status-tag ${user.accountStatus === "Active" ? 'active' : 'banned'}`}>
-                {user.accountStatus === "Active" ? 'Aktivan' : 'Zabranjen'}
-              </span>
+            
+            <div className="info-item">
+              <label>Email:</label>
+              <p>{userData.email || 'N/A'}</p>
             </div>
-          </div>
-
-          <div className="info-group">
-            <label className="info-label">Datum registracije</label>
-            <div className="info-value">{formatDateCroatian(user.createdAt)}</div>
+            
+            <div className="info-item">
+              <label>Uloga:</label>
+              <p>
+                {userData.role === 'Admin' && 'Administrator'}
+                {userData.role === 'Moderator' && 'Moderator'}
+                {userData.role === 'Regular' && 'Korisnik'}
+              </p>
+            </div>
+            
+            <div className="info-item">
+              <label>Status računa:</label>
+              <p className={`status ${userData.accountStatus === 'Active' ? 'status-active' : 'status-banned'}`}>
+                {userData.accountStatus === 'Active' ? 'Aktivan' : 'Blokiran'}
+              </p>
+            </div>
+            
+            <div className="info-item">
+              <label>Datum registracije:</label>
+              <p>{formatDate(userData.createdAt)}</p>
+            </div>
           </div>
         </div>
       </div>
@@ -142,19 +182,4 @@ function UserSettings({ user, onUserUpdated }) {
   );
 }
 
-UserSettings.propTypes = {
-  user: PropTypes.shape({
-    id: PropTypes.number,
-    userId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    username: PropTypes.string,
-    email: PropTypes.string,
-    role: PropTypes.string,
-    createdAt: PropTypes.string,
-    avatarUrl: PropTypes.string,
-  }),
-  onUserUpdated: PropTypes.func,
-};
-
 export default UserSettings;
-
-
