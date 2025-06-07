@@ -15,21 +15,24 @@ namespace IzjasniSe.Api.Services
         private readonly IProposalService _proposalService;
         private readonly IUserService _userService;
         private readonly ILocationService _locationService;
-        private readonly IHttpContextAccessor _httpContextAccessor; 
+        private readonly ILoggedInService _loggedInService;
+        private readonly IFileUploadService _fileUploadService;
         private readonly ILogger<SuggestionService> _logger;
 
         public SuggestionService(
-             AppDbContext db,
-             IHttpContextAccessor httpContextAccessor, 
+             AppDbContext db, 
              ILogger<SuggestionService> logger,        
              IProposalService proposalService,         
-             ILocationService locationService)         
+             ILocationService locationService,
+             ILoggedInService loggedInService,
+             IFileUploadService fileUploadService)         
         {
             _db = db;
-            _httpContextAccessor = httpContextAccessor; 
             _logger = logger;                       
             _proposalService = proposalService;
             _locationService = locationService;
+            _loggedInService = loggedInService;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<IEnumerable<Suggestion>> GetAllAsync()
@@ -90,7 +93,7 @@ namespace IzjasniSe.Api.Services
 
         public async Task<Suggestion?> CreateAsync(SuggestionCreateDto suggestionCreateDto)
         {
-            var (currentUserId, _) = GetCurrentUser();
+            var currentUserId = _loggedInService.GetCurrentUserId();
            
             if (currentUserId == null)
             {
@@ -134,7 +137,8 @@ namespace IzjasniSe.Api.Services
 
         public async Task<AuthorizationResult> UpdateAsync(int id, SuggestionUpdateDto suggestionUpdateDto)
         {
-            var (currentUserId, isAdmin) = GetCurrentUser();
+            var currentUserId = _loggedInService.GetCurrentUserId();
+            var isAdmin = _loggedInService.IsCurrentUserAdmin();
 
             if (currentUserId == null)
             {
@@ -208,7 +212,8 @@ namespace IzjasniSe.Api.Services
 
         public async Task<AuthorizationResult> DeleteAsync(int id)
         {
-            var (currentUserId, isAdmin) = GetCurrentUser();
+            var currentUserId = _loggedInService.GetCurrentUserId();
+            var isAdmin = _loggedInService.IsCurrentUserAdmin();
 
             if (currentUserId == null)
             {
@@ -237,14 +242,34 @@ namespace IzjasniSe.Api.Services
             return new AuthorizationResult(AuthorizationResultStatus.Allowed);
         }
 
-        private (int? UserId, bool IsAdmin) GetCurrentUser()
+        public async Task<bool> UpdateProfileImageAsync(int id, string profileImageUrl)
         {
-            var user = _httpContextAccessor.HttpContext?.User;
-            if (user?.Identity?.IsAuthenticated != true) return (null, false);
-            var userIdClaim = user.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdClaim, out var userId)) return (null, false);
-            bool isAdmin = user.IsInRole("Admin");
-            return (userId, isAdmin);
+            var currentUserId = _loggedInService.GetCurrentUserId();
+
+            if (currentUserId == null)
+                return false;
+
+            var suggestion = await _db.Suggestions.FindAsync(id);
+            if (suggestion == null)
+                return false;
+
+            // Check authorization
+            if (suggestion.AuthorId != currentUserId)
+                return false;
+
+            // Delete old image if exists
+            if (!string.IsNullOrEmpty(suggestion.ProfileImageUrl))
+            {
+                await _fileUploadService.DeleteFileAsync(suggestion.ProfileImageUrl);
+            }
+
+            suggestion.ProfileImageUrl = profileImageUrl;
+            suggestion.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+            _logger.LogInformation("Updated profile image for suggestion {SuggestionId}", id);
+
+            return true;
         }
     }
 }

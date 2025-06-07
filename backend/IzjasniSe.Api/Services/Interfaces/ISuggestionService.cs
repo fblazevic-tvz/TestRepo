@@ -13,5 +13,6 @@ namespace IzjasniSe.Api.Services.Interfaces
         Task<Suggestion?> CreateAsync(SuggestionCreateDto suggestionCreateDto);
         Task<AuthorizationResult> UpdateAsync(int id, SuggestionUpdateDto suggestionUpdateDto);
         Task<AuthorizationResult> DeleteAsync(int id);
+        Task<bool> UpdateProfileImageAsync(int id, string profileImageUrl);
     }
 }

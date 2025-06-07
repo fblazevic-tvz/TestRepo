@@ -13,13 +13,15 @@ namespace IzjasniSe.Api.Services
         private readonly IUserService _userService;
         private readonly ICityService _cityService;
         private readonly ILoggedInService _loggedInService;
+        private readonly IFileUploadService _fileUploadService;
 
-        public ProposalService(AppDbContext db, IUserService userService, ICityService cityService, ILoggedInService loggedInService)
+        public ProposalService(AppDbContext db, IUserService userService, ICityService cityService, ILoggedInService loggedInService, IFileUploadService fileUploadService)
         {
             _db = db;
             _userService = userService;
             _cityService = cityService;
             _loggedInService = loggedInService;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<IEnumerable<Proposal>> GetAllAsync()
@@ -169,6 +171,32 @@ namespace IzjasniSe.Api.Services
 
         public async Task<bool> ProposalExistsAsync(int id) {
             return await _db.Proposals.AnyAsync(p => p.Id == id);
+        }
+
+        public async Task<bool> UpdateProfileImageAsync(int id, string profileImageUrl)
+        {
+            var currentUserId = _loggedInService.GetCurrentUserId();
+            if (currentUserId == null)
+                return false;
+
+            var proposal = await _db.Proposals.FindAsync(id);
+            if (proposal == null)
+                return false;
+
+            // Check if user is the moderator or admin
+            if (proposal.ModeratorId != currentUserId)
+                return false;
+
+            if (!string.IsNullOrEmpty(proposal.ProfileImageUrl))
+            {
+                await _fileUploadService.DeleteFileAsync(proposal.ProfileImageUrl);
+            }
+
+            proposal.ProfileImageUrl = profileImageUrl;
+            proposal.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+            return true;
         }
     }
 }

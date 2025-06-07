@@ -11,12 +11,14 @@ namespace IzjasniSe.Api.Services
         private readonly AppDbContext _db;
         private readonly IProposalService _proposalsService;
         private readonly ILoggedInService _loggedInService;
+        private readonly IFileUploadService _fileUploadService;
 
-        public NoticeService(AppDbContext db, IProposalService proposalsService, ILoggedInService loggedInService)
+        public NoticeService(AppDbContext db, IProposalService proposalsService, ILoggedInService loggedInService, IFileUploadService fileUploadService)
         {
             _db = db;
             _proposalsService = proposalsService;
             _loggedInService = loggedInService;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<IEnumerable<Notice>> GetAllAsync()
@@ -132,6 +134,32 @@ namespace IzjasniSe.Api.Services
             }
 
             return false;
+        }
+
+        public async Task<bool> UpdateProfileImageAsync(int id, string profileImageUrl)
+        {
+            var currentUserId = _loggedInService.GetCurrentUserId();
+            if (currentUserId == null)
+                return false;
+
+            var notice = await _db.Notices.FindAsync(id);
+            if (notice == null)
+                return false;
+
+            // Check if user is the moderator or admin
+            if (notice.ModeratorId != currentUserId)
+                return false;
+
+            if (!string.IsNullOrEmpty(notice.ProfileImageUrl))
+            {
+                await _fileUploadService.DeleteFileAsync(notice.ProfileImageUrl);
+            }
+
+            notice.ProfileImageUrl = profileImageUrl;
+            notice.UpdatedAt = DateTime.UtcNow;
+
+            await _db.SaveChangesAsync();
+            return true;
         }
     }
 }

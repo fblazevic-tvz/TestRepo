@@ -15,7 +15,9 @@ namespace IzjasniSe.DAL
         public DbSet<Vote> Votes { get; set; } = null!;
         public DbSet<Comment> Comments { get; set; } = null!;
         public DbSet<Notice> Notices { get; set; } = null!;
-        public DbSet<Model.Entities.Attachment> Attachments { get; set; } = null!;
+        public DbSet<SuggestionAttachment> SuggestionAttachments { get; set; } = null!;
+        public DbSet<ProposalAttachment> ProposalAttachments { get; set; } = null!;
+        public DbSet<NoticeAttachment> NoticeAttachments { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -76,13 +78,25 @@ namespace IzjasniSe.DAL
                 .HasMany(p => p.Suggestions)
                 .WithOne(s => s.Proposal)
                 .HasForeignKey(s => s.ProposalId)
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Proposal>()
                 .HasMany(p => p.Notices)
                 .WithOne(n => n.Proposal)
                 .HasForeignKey(n => n.ProposalId)
-                .OnDelete(DeleteBehavior.Cascade); 
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Proposal>()
+                .HasMany(p => p.Attachments)
+                .WithOne(a => a.Proposal)
+                .HasForeignKey(a => a.ProposalId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Notice>()
+                .HasMany(n => n.Attachments)
+                .WithOne(a => a.Notice)
+                .HasForeignKey(a => a.NoticeId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Suggestion>()
                 .HasMany(s => s.Votes)

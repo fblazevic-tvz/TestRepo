@@ -10,7 +10,7 @@ namespace IzjasniSe.Api.Services.Interfaces
         Task<Notice?> CreateAsync(NoticeCreateDto noticeCreateDto);
         Task<bool> UpdateAsync(int id, NoticeUpdateDto noticeUpdateDto);
         Task<bool> DeleteAsync(int id);
-
         Task<IEnumerable<Notice>> GetByProposalIdAsync(int proposalId);
+        Task<bool> UpdateProfileImageAsync(int id, string profileImageUrl);
     }
 }

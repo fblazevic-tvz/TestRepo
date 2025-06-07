@@ -25,6 +25,9 @@ namespace IzjasniSe.Model.Entities
         [Required]
         public ProposalStatus Status { get; set; }
 
+        [MaxLength(500)]
+        public string? ProfileImageUrl { get; set; }
+
         [Required]
         public int CityId { get; set; }
         [ForeignKey("CityId")]
@@ -36,6 +39,7 @@ namespace IzjasniSe.Model.Entities
 
         public virtual ICollection<Suggestion> Suggestions { get; set; } = new List<Suggestion>();
         public virtual ICollection<Notice> Notices { get; set; } = new List<Notice>();
+        public virtual ICollection<ProposalAttachment> Attachments { get; set; } = new List<ProposalAttachment>();
     }
 
 }

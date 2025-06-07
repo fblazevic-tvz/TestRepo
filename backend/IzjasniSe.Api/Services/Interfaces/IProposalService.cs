@@ -13,5 +13,6 @@ namespace IzjasniSe.Api.Services.Interfaces
         Task<bool> UpdateAsync(int id, ProposalUpdateDto proposalUpdateDto);
         Task<bool> DeleteAsync(int id);
         Task<bool> ProposalExistsAsync(int id);
+        Task<bool> UpdateProfileImageAsync(int id, string profileImageUrl);
     }
 }

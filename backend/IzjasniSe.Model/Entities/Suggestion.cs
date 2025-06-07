@@ -19,6 +19,10 @@ namespace IzjasniSe.Model.Entities
 
         [Required]
         public SuggestionStatus Status { get; set; }
+
+        [MaxLength(500)]
+        public string? ProfileImageUrl { get; set; }
+
         [Required]
         public int ProposalId { get; set; }
         [ForeignKey("ProposalId")]
@@ -35,7 +39,7 @@ namespace IzjasniSe.Model.Entities
 
         public virtual ICollection<Vote> Votes { get; set; } = new List<Vote>();
         public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
-        public virtual ICollection<Attachment> Attachments { get; set; } = new List<Attachment>();
+        public virtual ICollection<SuggestionAttachment> Attachments { get; set; } = new List<SuggestionAttachment>();
 
         [NotMapped] 
         public int VoteCount => Votes?.Count ?? 0;

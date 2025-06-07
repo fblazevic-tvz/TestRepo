@@ -187,12 +187,6 @@ namespace IzjasniSe.DAL.Seed
             };
             await context.Notices.AddRangeAsync(notices);
 
-            var attachments = new List<Model.Entities.Attachment>
-            {
-                 new Model.Entities.Attachment { FilePathOrUrl = "/attachments/placeholder/ljuljacke_stare.jpg", FileName = "ljuljacke_stare.jpg", ContentType="image/jpeg", FileSize=102400, Suggestion = suggestions[0], CreatedAt=DateTime.UtcNow.AddDays(-25)},
-                 new Model.Entities.Attachment { FilePathOrUrl = "/attachments/placeholder/plan_tlocrt.pdf", FileName = "plan_tlocrt.pdf", ContentType="application/pdf", FileSize=512000, Suggestion = suggestions[0], CreatedAt=DateTime.UtcNow.AddDays(-25)},
-            };
-            await context.Attachments.AddRangeAsync(attachments);
 
             await context.SaveChangesAsync();
         }
