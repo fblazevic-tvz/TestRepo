@@ -154,7 +154,7 @@ namespace IzjasniSe.Api.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            var existing = await _db.Proposals.FindAsync(id);
+            var existing = await _db.Proposals.Include(p=>p.Attachments).FirstOrDefaultAsync(p=> p.Id == id);
             if (existing == null) return false;
 
             var currentUserId = _loggedInService.GetCurrentUserId();
@@ -166,6 +166,11 @@ namespace IzjasniSe.Api.Services
 
             _db.Proposals.Remove(existing);
             await _db.SaveChangesAsync();
+
+            foreach(ProposalAttachment proposalAttachment in existing.Attachments) {
+                await _fileUploadService.DeleteFileAsync(proposalAttachment.FilePathOrUrl);
+            }
+
             return true;
         }
 

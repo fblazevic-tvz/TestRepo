@@ -75,7 +75,7 @@ function SuggestionDetailPage() {
         return (
             <div className="detail-page-tabs suggestion-tabs">
                 <button onClick={() => setActiveTab('details')} className={`tab-button ${activeTab === 'details' ? 'active' : ''}`}>Detalji</button>
-                <button onClick={() => setActiveTab('attachments')} className={`tab-button ${activeTab === 'attachments' ? 'active' : ''}`}>Dodatci</button>
+                <button onClick={() => setActiveTab('attachments')} className={`tab-button ${activeTab === 'attachments' ? 'active' : ''}`}>Dokumenti</button>
                 <button onClick={() => setActiveTab('comments')} className={`tab-button ${activeTab === 'comments' ? 'active' : ''}`}>Komentari ({suggestion?.comments?.length || 0})</button>
             </div>
         );
@@ -88,7 +88,7 @@ function SuggestionDetailPage() {
             case 'details':
                 return <SuggestionDetailInfo suggestion={suggestion} />;
             case 'attachments':
-                return <SuggestionAttachments suggestionId={suggestion.id} attachments={suggestion.attachments} />;
+                return <SuggestionAttachments suggestionId={suggestion.id} />;
             case 'comments':
                 return <SuggestionComments
                     suggestionId={suggestion.id}

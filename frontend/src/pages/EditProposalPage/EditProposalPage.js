@@ -2,8 +2,12 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { fetchProposalById, updateProposal } from '../../services/proposalService';
+import { fetchProposalAttachments, uploadProposalAttachments, deleteProposalAttachment } from '../../services/proposalAttachmentService';
 import { fetchCities } from '../../services/cityService';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import './EditProposalPage.css';
 
 function EditProposalPage() {
@@ -20,6 +24,12 @@ function EditProposalPage() {
     const [submissionEndTime, setSubmissionEndTime] = useState('23:59');
     const [status, setStatus] = useState('');
     const [cityId, setCityId] = useState('');
+
+    // Existing attachments
+    const [existingAttachments, setExistingAttachments] = useState([]);
+    // New attachments to upload
+    const [newAttachments, setNewAttachments] = useState([]);
+    const [newFileDescriptions, setNewFileDescriptions] = useState([]);
 
     const [originalProposal, setOriginalProposal] = useState(null);
     const [cities, setCities] = useState([]);
@@ -57,9 +67,10 @@ function EditProposalPage() {
         setIsLoading(true);
         setError(null);
         try {
-            const [proposalData, citiesData] = await Promise.all([
+            const [proposalData, citiesData, attachmentsData] = await Promise.all([
                 fetchProposalById(proposalId),
-                fetchCities()
+                fetchCities(),
+                fetchProposalAttachments(proposalId)
             ]);
 
             const proposalModeratorId = proposalData?.moderatorId;
@@ -88,11 +99,13 @@ function EditProposalPage() {
             setStatus(proposalData.status || 'Active');
             setCityId(proposalData.cityId?.toString() || '');
             setCities(citiesData);
+            setExistingAttachments(attachmentsData);
 
         } catch (err) {
             setError(err.message || 'Greška pri dohvaćanju podataka za uređivanje.');
             setOriginalProposal(null);
             setCities([]);
+            setExistingAttachments([]);
         } finally {
             setIsLoading(false);
         }
@@ -101,6 +114,54 @@ function EditProposalPage() {
     useEffect(() => {
         loadData();
     }, [loadData]);
+
+    const handleDeleteExistingAttachment = async (attachmentId) => {
+        const confirmDelete = window.confirm('Jeste li sigurni da želite obrisati ovaj prilog?');
+        if (!confirmDelete) return;
+
+        try {
+            await deleteProposalAttachment(attachmentId);
+            setExistingAttachments(existingAttachments.filter(att => att.id !== attachmentId));
+            setSubmitStatus({ success: true, message: 'Prilog uspješno obrisan.' });
+        } catch (err) {
+            setSubmitStatus({ success: false, message: err.message || 'Greška pri brisanju priloga.' });
+        }
+    };
+
+    const handleFileChange = (event) => {
+        const files = Array.from(event.target.files);
+        const validFiles = files.filter(file => {
+            if (file.type !== 'application/pdf') {
+                setSubmitStatus({ success: false, message: `Datoteka ${file.name} nije PDF format. Samo PDF datoteke su dozvoljene.` });
+                return false;
+            }
+            if (file.size > 10 * 1024 * 1024) {
+                setSubmitStatus({ success: false, message: `Datoteka ${file.name} prelazi maksimalnu veličinu od 10MB.` });
+                return false;
+            }
+            return true;
+        });
+
+        if (validFiles.length > 0) {
+            setNewAttachments([...newAttachments, ...validFiles]);
+            const newDescriptions = [...newFileDescriptions];
+            validFiles.forEach(() => newDescriptions.push(''));
+            setNewFileDescriptions(newDescriptions);
+        }
+    };
+
+    const handleRemoveNewFile = (index) => {
+        const updatedAttachments = newAttachments.filter((_, i) => i !== index);
+        const updatedDescriptions = newFileDescriptions.filter((_, i) => i !== index);
+        setNewAttachments(updatedAttachments);
+        setNewFileDescriptions(updatedDescriptions);
+    };
+
+    const handleNewDescriptionChange = (index, value) => {
+        const updatedDescriptions = [...newFileDescriptions];
+        updatedDescriptions[index] = value;
+        setNewFileDescriptions(updatedDescriptions);
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -140,10 +201,21 @@ function EditProposalPage() {
 
         try {
             await updateProposal(proposalId, updateData);
+
+            // Upload new attachments if any
+            if (newAttachments.length > 0) {
+                try {
+                    await uploadProposalAttachments(proposalId, newAttachments, newFileDescriptions);
+                } catch (attachmentError) {
+                    console.error('Failed to upload new attachments:', attachmentError);
+                    // Continue even if attachments fail
+                }
+            }
+
             setSubmitStatus({ success: true, message: 'Natječaj uspješno ažuriran!' });
             setTimeout(() => {
                 navigate(`/proposals/${proposalId}`);
-            }, 1500);
+            }, 300);
         } catch (err) {
             setSubmitStatus({ success: false, message: err.message || 'Greška pri ažuriranju natječaja.' });
         } finally {
@@ -285,6 +357,83 @@ function EditProposalPage() {
                             ))}
                         </select>
                     </div>
+                </div>
+
+                <div className="form-group">
+                    <label>Postojeći prilozi:</label>
+                    {existingAttachments.length > 0 ? (
+                        <div className="existing-attachments-list">
+                            {existingAttachments.map(att => (
+                                <div key={att.id} className="existing-attachment-item">
+                                    <div className="attachment-info">
+                                        <span className="attachment-name">{att.fileName}</span>
+                                        {att.description && <span className="attachment-desc">({att.description})</span>}
+                                        <span className="attachment-size">{(att.fileSize / 1024 / 1024).toFixed(2)} MB</span>
+                                    </div>
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => handleDeleteExistingAttachment(att.id)}
+                                        disabled={isSubmitting}
+                                        className="delete-attachment-button"
+                                        title="Obriši prilog"
+                                    >
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="no-attachments-text">Nema postojećih priloga.</p>
+                    )}
+                </div>
+
+                <div className="form-group">
+                    <label>Dodaj nove priloge (PDF dokumenti):</label>
+                    <div className="file-upload-area">
+                        <input
+                            type="file"
+                            id="file-upload"
+                            multiple
+                            accept=".pdf"
+                            onChange={handleFileChange}
+                            disabled={isSubmitting}
+                            style={{ display: 'none' }}
+                        />
+                        <label htmlFor="file-upload" className="file-upload-button">
+                            <AttachFileIcon /> Dodaj PDF dokumente
+                        </label>
+                        <span className="file-hint">Maksimalna veličina: 10MB po datoteci. Samo PDF format.</span>
+                    </div>
+
+                    {newAttachments.length > 0 && (
+                        <div className="attachments-list">
+                            <h4>Novi dokumenti:</h4>
+                            {newAttachments.map((file, index) => (
+                                <div key={index} className="attachment-item">
+                                    <div className="attachment-info">
+                                        <span className="attachment-name">{file.name}</span>
+                                        <span className="attachment-size">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                                    </div>
+                                    <input
+                                        type="text"
+                                        placeholder="Opis dokumenta (opcionalno)"
+                                        value={newFileDescriptions[index]}
+                                        onChange={(e) => handleNewDescriptionChange(index, e.target.value)}
+                                        className="attachment-description"
+                                        disabled={isSubmitting}
+                                    />
+                                    <IconButton
+                                        size="small"
+                                        onClick={() => handleRemoveNewFile(index)}
+                                        disabled={isSubmitting}
+                                        className="remove-attachment-button"
+                                    >
+                                        <DeleteIcon fontSize="small" />
+                                    </IconButton>
+                                </div>
+                            ))}
+                        </div>
+                    )}
                 </div>
 
                 <div className="form-actions">

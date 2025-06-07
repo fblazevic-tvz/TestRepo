@@ -72,3 +72,15 @@
       color: #6c757d;
       font-style: italic;
   }
+
+  .attachment-desc {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.9rem;
+    font-style: italic;
+}

@@ -221,7 +221,7 @@ namespace IzjasniSe.Api.Services
                 return new AuthorizationResult(AuthorizationResultStatus.Denied_Forbidden, "Authentication required.");
             }
 
-            var existingSuggestion = await _db.Suggestions.FirstOrDefaultAsync(s => s.Id == id);
+            var existingSuggestion = await _db.Suggestions.Include(s=>s.Attachments).FirstOrDefaultAsync(s => s.Id == id);
 
             if (existingSuggestion == null)
             {
@@ -237,6 +237,11 @@ namespace IzjasniSe.Api.Services
 
             _db.Suggestions.Remove(existingSuggestion);
             await _db.SaveChangesAsync();
+
+            foreach (SuggestionAttachment suggestionAttachment in existingSuggestion.Attachments)
+            {
+                await _fileUploadService.DeleteFileAsync(suggestionAttachment.FilePathOrUrl);
+            }
 
             _logger.LogInformation("User {UserId} deleted suggestion {SuggestionId}.", currentUserId, id);
             return new AuthorizationResult(AuthorizationResultStatus.Allowed);

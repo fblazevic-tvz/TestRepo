@@ -2,9 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { createSuggestion } from '../../services/suggestionService';
+import { uploadSuggestionAttachments } from '../../services/suggestionAttachmentService';
 import { fetchProposalById } from '../../services/proposalService';
 import { fetchLocations } from '../../services/locationService';
 import LoadingSpinner from '../../components/LoadingSpinner/LoadingSpinner';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
 import './CreateSuggestionPage.css';
 
 function useQuery() {
@@ -22,6 +26,10 @@ function CreateSuggestionPage() {
   const [description, setDescription] = useState('');
   const [estimatedCost, setEstimatedCost] = useState('');
   const [locationId, setLocationId] = useState('');
+
+  // File attachment states
+  const [attachments, setAttachments] = useState([]);
+  const [fileDescriptions, setFileDescriptions] = useState([]);
 
   const [proposal, setProposal] = useState(null);
   const [locations, setLocations] = useState([]);
@@ -64,6 +72,44 @@ function CreateSuggestionPage() {
     loadData();
   }, [proposalId, isAuthenticated, navigate]);
 
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    const validFiles = files.filter(file => {
+      // Check file type (only PDFs allowed based on backend)
+      if (file.type !== 'application/pdf') {
+        setSubmitStatus({ success: false, message: `Datoteka ${file.name} nije PDF format. Samo PDF datoteke su dozvoljene.` });
+        return false;
+      }
+      // Check file size (10MB limit based on backend)
+      if (file.size > 10 * 1024 * 1024) {
+        setSubmitStatus({ success: false, message: `Datoteka ${file.name} prelazi maksimalnu veličinu od 10MB.` });
+        return false;
+      }
+      return true;
+    });
+
+    if (validFiles.length > 0) {
+      setAttachments([...attachments, ...validFiles]);
+      // Add empty descriptions for new files
+      const newDescriptions = [...fileDescriptions];
+      validFiles.forEach(() => newDescriptions.push(''));
+      setFileDescriptions(newDescriptions);
+    }
+  };
+
+  const handleRemoveFile = (index) => {
+    const newAttachments = attachments.filter((_, i) => i !== index);
+    const newDescriptions = fileDescriptions.filter((_, i) => i !== index);
+    setAttachments(newAttachments);
+    setFileDescriptions(newDescriptions);
+  };
+
+  const handleDescriptionChange = (index, value) => {
+    const newDescriptions = [...fileDescriptions];
+    newDescriptions[index] = value;
+    setFileDescriptions(newDescriptions);
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     setSubmitStatus({ success: false, message: '' });
@@ -89,15 +135,30 @@ function CreateSuggestionPage() {
     };
 
     try {
+      // First create the suggestion
       const createdSuggestion = await createSuggestion(suggestionData);
+      
+      // Then upload attachments if any
+      if (attachments.length > 0) {
+        try {
+          await uploadSuggestionAttachments(createdSuggestion.id, attachments, fileDescriptions);
+        } catch (attachmentError) {
+          console.error('Failed to upload attachments:', attachmentError);
+          // Continue even if attachments fail
+        }
+      }
+
       setSubmitStatus({ success: true, message: 'Prijedlog uspješno kreiran!' });
       setName('');
       setDescription('');
       setEstimatedCost('');
       setLocationId('');
+      setAttachments([]);
+      setFileDescriptions([]);
+      
       setTimeout(() => {
         navigate(`/proposals/${proposalId}`);
-      }, 2000);
+      }, 300);
     } catch (err) {
       setSubmitStatus({ success: false, message: err.message || 'Greška pri kreiranju prijedloga.' });
     } finally {
@@ -182,6 +243,55 @@ function CreateSuggestionPage() {
               </option>
             ))}
           </select>
+        </div>
+
+        <div className="form-group">
+          <label>Prilozi (PDF dokumenti):</label>
+          <div className="file-upload-area">
+            <input
+              type="file"
+              id="file-upload"
+              multiple
+              accept=".pdf"
+              onChange={handleFileChange}
+              disabled={isSubmitting}
+              style={{ display: 'none' }}
+            />
+            <label htmlFor="file-upload" className="file-upload-button">
+              <AttachFileIcon /> Dodaj PDF dokumente
+            </label>
+            <span className="file-hint">Maksimalna veličina: 10MB po datoteci. Samo PDF format.</span>
+          </div>
+
+          {attachments.length > 0 && (
+            <div className="attachments-list">
+              <h4>Odabrani dokumenti:</h4>
+              {attachments.map((file, index) => (
+                <div key={index} className="attachment-item">
+                  <div className="attachment-info">
+                    <span className="attachment-name">{file.name}</span>
+                    <span className="attachment-size">({(file.size / 1024 / 1024).toFixed(2)} MB)</span>
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Opis dokumenta (opcionalno)"
+                    value={fileDescriptions[index]}
+                    onChange={(e) => handleDescriptionChange(index, e.target.value)}
+                    className="attachment-description"
+                    disabled={isSubmitting}
+                  />
+                  <IconButton
+                    size="small"
+                    onClick={() => handleRemoveFile(index)}
+                    disabled={isSubmitting}
+                    className="remove-attachment-button"
+                  >
+                    <DeleteIcon fontSize="small" />
+                  </IconButton>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="form-actions">

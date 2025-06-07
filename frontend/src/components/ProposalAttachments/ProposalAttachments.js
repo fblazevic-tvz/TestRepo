@@ -1,17 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { fetchSuggestionAttachments } from '../../services/suggestionAttachmentService';
-import './SuggestionAttachments.css';
+import { fetchProposalAttachments } from '../../services/proposalAttachmentService';
+import './ProposalAttachments.css';
 
-function SuggestionAttachments({ suggestionId }) {
+function ProposalAttachments({ proposalId }) {
     const [attachments, setAttachments] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
         const loadAttachments = async () => {
-            if (!suggestionId) {
-                setError('Invalid suggestion ID');
+            if (!proposalId) {
+                setError('Invalid proposal ID');
                 setIsLoading(false);
                 return;
             }
@@ -20,7 +20,7 @@ function SuggestionAttachments({ suggestionId }) {
             setError(null);
             
             try {
-                const data = await fetchSuggestionAttachments(suggestionId);
+                const data = await fetchProposalAttachments(proposalId);
                 setAttachments(data);
             } catch (err) {
                 console.error('Failed to load attachments:', err);
@@ -31,11 +31,11 @@ function SuggestionAttachments({ suggestionId }) {
         };
 
         loadAttachments();
-    }, [suggestionId]);
+    }, [proposalId]);
 
     if (isLoading) {
         return (
-            <div className="suggestion-attachments">
+            <div className="proposal-attachments">
                 <h2>Priloženi dokumenti</h2>
                 <div className="attachments-list-container">
                     <p>Učitavanje dokumenata...</p>
@@ -46,7 +46,7 @@ function SuggestionAttachments({ suggestionId }) {
 
     if (error) {
         return (
-            <div className="suggestion-attachments">
+            <div className="proposal-attachments">
                 <h2>Priloženi dokumenti</h2>
                 <div className="attachments-list-container">
                     <p className="error-message">Greška pri učitavanju dokumenata: {error}</p>
@@ -56,7 +56,7 @@ function SuggestionAttachments({ suggestionId }) {
     }
 
     return (
-        <div className="suggestion-attachments">
+        <div className="proposal-attachments">
             <h2>Priloženi dokumenti</h2>
 
             <div className="attachments-list-container">
@@ -85,15 +85,15 @@ function SuggestionAttachments({ suggestionId }) {
                         ))}
                     </ul>
                 ) : (
-                    <p>Nema priloženih dokumenata za ovaj prijedlog.</p>
+                    <p>Nema priloženih dokumenata za ovaj natječaj.</p>
                 )}
             </div>
         </div>
     );
 }
 
-SuggestionAttachments.propTypes = {
-    suggestionId: PropTypes.number.isRequired,
+ProposalAttachments.propTypes = {
+    proposalId: PropTypes.number.isRequired,
 };
 
-export default SuggestionAttachments;
+export default ProposalAttachments;
