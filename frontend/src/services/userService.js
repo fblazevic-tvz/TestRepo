@@ -76,3 +76,32 @@ export const changeUserStatus = async (userId, status) => {
     throw new Error(errorMessage);
   }
 };
+
+export const uploadUserAvatar = async (userId, file) => {
+  if (!userId || !file) {
+    return Promise.reject(new Error("User ID and file are required."));
+  }
+
+  const formData = new FormData();
+  formData.append('avatar', file);
+
+  try {
+    const response = await api.post(`/users/${userId}/avatar`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error(`Failed to upload avatar for user ${userId}:`, error);
+    let errorMessage = 'Greška pri učitavanju slike.';
+    if (isAxiosError(error)) {
+      if (error.response?.status === 403) {
+        errorMessage = 'Nemate ovlasti za promjenu ove slike.';
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+    }
+    throw new Error(errorMessage);
+  }
+};

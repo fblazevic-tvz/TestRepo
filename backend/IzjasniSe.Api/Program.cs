@@ -74,6 +74,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IVoteService, VoteService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ILoggedInService, LoggedInService>();
+builder.Services.AddScoped<IFileUploadService, FileUploadService>();
 
 var app = builder.Build();
 
@@ -83,10 +84,10 @@ if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
-
+app.Environment.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
 app.UseHttpsRedirection();
-
 app.UseCors(MyAllowSpecificOrigins);
+app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

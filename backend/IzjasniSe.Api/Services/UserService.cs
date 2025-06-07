@@ -12,12 +12,14 @@ namespace IzjasniSe.Api.Services
     {
         private readonly AppDbContext _db;
         private readonly ILoggedInService _loggednInService;
+        private readonly IFileUploadService _fileUploadService;
         private readonly PasswordHasher<User> _passwordHasher = new();
 
-        public UserService(AppDbContext db, ILoggedInService loggedInService)
+        public UserService(AppDbContext db, ILoggedInService loggedInService, IFileUploadService fileUploadService)
         {
             _db = db;
             _loggednInService = loggedInService;
+            _fileUploadService = fileUploadService;
         }
 
         public async Task<IEnumerable<UserReadDto>> GetAllAsync()
@@ -38,7 +40,8 @@ namespace IzjasniSe.Api.Services
                     Email = user.Email,
                     Role = user.Role,
                     accountStatus = user.AccountStatus,
-                    CreatedAt = user.CreatedAt
+                    CreatedAt = user.CreatedAt,
+                    AvatarUrl = user.AvatarUrl
                 };
 
                 userReadDtoList.Add(userReadDto);
@@ -86,7 +89,8 @@ namespace IzjasniSe.Api.Services
                     Email = user.Email,
                     Role = user.Role,
                     accountStatus = user.AccountStatus,
-                    CreatedAt = user.CreatedAt
+                    CreatedAt = user.CreatedAt,
+                    AvatarUrl = user.AvatarUrl
                 };
             }
 
@@ -188,6 +192,28 @@ namespace IzjasniSe.Api.Services
         {
             return await _db.Users
                 .AnyAsync(u => u.Id == id && u.Role == UserRole.Moderator);
+        }
+
+        public async Task<bool> UpdateAvatarAsync(int id, string avatarUrl)
+        {
+            var currentUserId = _loggednInService.GetCurrentUserId();
+            if (currentUserId == id) {
+                var user = await GetUserEntityByIdAsync(id);
+                if (user == null) return false;
+
+                // Delete old avatar if exists
+                if (!string.IsNullOrEmpty(user.AvatarUrl))
+                {
+                    await _fileUploadService.DeleteAvatarAsync(user.AvatarUrl);
+                }
+
+                user.AvatarUrl = avatarUrl;
+                user.UpdatedAt = DateTime.UtcNow;
+
+                await _db.SaveChangesAsync();
+                return true;
+            }
+            return false;
         }
     }
 }

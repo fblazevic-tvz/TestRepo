@@ -14,5 +14,6 @@ namespace IzjasniSe.Api.Services.Interfaces
         Task<bool> ChangeStatusAsync(int id, UserAccountStatus status);
         Task<bool> CheckUniqueness(string? username, string? email);
         Task<bool> ModeratorExistsAsync(int id);
+        Task<bool> UpdateAvatarAsync(int id, string avatarUrl);
     }
 }

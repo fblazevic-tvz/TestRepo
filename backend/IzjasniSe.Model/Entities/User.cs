@@ -20,6 +20,9 @@ namespace IzjasniSe.Model.Entities
         [Required]
         public UserRole Role { get; set; } = UserRole.Regular;
 
+        [MaxLength(500)]
+        public string? AvatarUrl { get; set; }
+
         public string? RefreshToken { get; set; }
         public DateTime? RefreshTokenExpiryTime { get; set; }
 

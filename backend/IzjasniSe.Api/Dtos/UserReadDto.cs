@@ -8,4 +8,5 @@ public class UserReadDto
     public UserRole Role { get; set; }
     public UserAccountStatus accountStatus { get; set; }
     public DateTime CreatedAt { get; set; }
+    public string? AvatarUrl { get; set; }
 }
